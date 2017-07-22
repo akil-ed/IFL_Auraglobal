@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="firebase_database_url" translatable="false">https://incrediblefl-affdd.firebaseio.com</string>
+  <string name="gcm_defaultSenderId" translatable="false">1086913779861</string>
+  <string name="google_storage_bucket" translatable="false">incrediblefl-affdd.appspot.com</string>
+  <string name="project_id" translatable="false">incrediblefl-affdd</string>
+  <string name="google_api_key" translatable="false">AIzaSyCE41GcMxWzGq_VkP69gI_-kqCNkBU9Jpc</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCE41GcMxWzGq_VkP69gI_-kqCNkBU9Jpc</string>
+  <string name="google_app_id" translatable="false">1:1086913779861:android:683d41f672462053</string>
+  <string name="default_web_client_id" translatable="false">1086913779861-m2krs4ou1ejb6e3bgt0rcvr8q0162hc3.apps.googleusercontent.com</string>
+</resources>

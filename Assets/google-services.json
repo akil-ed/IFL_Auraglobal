@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1086913779861",
+    "firebase_url": "https://incrediblefl-affdd.firebaseio.com",
+    "project_id": "incrediblefl-affdd",
+    "storage_bucket": "incrediblefl-affdd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086913779861:android:683d41f672462053",
+        "android_client_info": {
+          "package_name": "com.auraglobal.incredibleFL"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086913779861-m2krs4ou1ejb6e3bgt0rcvr8q0162hc3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE41GcMxWzGq_VkP69gI_-kqCNkBU9Jpc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
