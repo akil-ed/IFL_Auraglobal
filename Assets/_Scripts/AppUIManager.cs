@@ -26,6 +26,7 @@ public class AppUIManager : MonoBehaviour {
 		else if (instance != this)
 			Destroy (gameObject);
 
+		Application.targetFrameRate = 60;
 		//Setup();
 
 
