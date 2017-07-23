@@ -11,6 +11,7 @@ public class TeamManager : MonoBehaviour {
 	public GameObject BA_Content, BL_Content, AR_Content, W_Content;
 	public List<PlayerData> MyList = new List<PlayerData>();
 	public int BA_Count, BL_Count, AR_Count, WK_Count, TeamCount;
+	public bool isCaptainSelected, isVCSelected;
 	public float CreditsRemaining;
 	public List<PlayerReviewItem> _PlayerReviewItems = new List<PlayerReviewItem>();
 	void Awake () 
@@ -122,12 +123,19 @@ public class TeamManager : MonoBehaviour {
 	}
 
 	public void FinalReview(){
-		print ("final review");
+		if (!isCaptainSelected || !isVCSelected) {
+			AppUIManager.instance.DebugLog ("Pick Captain and Vice Captain");
+			return;
+		}
+
+		SelectedMatch.MyTeam.Clear ();
 		MyList.Clear ();
+
 		for (int i = 0; i < 11; i++)
 			MyList.Add (_PlayerReviewItems [i]._PlayerData);
 		//print (JsonConvert.SerializeObject (MyList));
 		foreach(PlayerData PD in MyList){
+		SelectedMatch.MyTeam.Add (PD);
 		DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 		reference.Child ("Cricket").Child ("Tournament")
 			.Child (SelectedMatch.TournamentName)
@@ -152,8 +160,12 @@ public class TeamManager : MonoBehaviour {
 //			AppUIManager.instance.OpenReview ();
 //			return;
 //		}
+
+		ResetListings ();
+
 		AppUIManager.instance.PlayerSelection.Show(false);
 		foreach (PlayerData PD in SelectedMatch.Team1Players) {
+			
 			if (PD.Position == "BA") {
 				GameObject GO = Instantiate (PlayerPrefab);
 				GO.transform.SetParent (BA_Content.transform);
@@ -163,7 +175,7 @@ public class TeamManager : MonoBehaviour {
 				GO.transform.localScale = Vector3.one;
 				BA_Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (BA_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists (x => x.PlayerID == PD.PlayerID))
-					GO.GetComponent <PlayerItem> ().OnClick ();
+					GO.GetComponent <PlayerItem> ().ForceAdd ();
 
 			}
 			else if (PD.Position == "BL") {
@@ -175,7 +187,7 @@ public class TeamManager : MonoBehaviour {
 				GO.transform.localScale = Vector3.one;
 				BL_Content.GetComponent <RectTransform> ().sizeDelta = new Vector2 (BL_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists(x=>x.PlayerID==PD.PlayerID))
-					GO.GetComponent <PlayerItem> ().OnClick ();
+					GO.GetComponent <PlayerItem> ().ForceAdd ();
 			}
 			else if (PD.Position == "AR") {
 				GameObject GO = Instantiate (PlayerPrefab);
@@ -186,7 +198,7 @@ public class TeamManager : MonoBehaviour {
 				GO.transform.localScale = Vector3.one;
 				AR_Content.GetComponent <RectTransform> ().sizeDelta = new Vector2 (AR_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists(x=>x.PlayerID==PD.PlayerID))
-					GO.GetComponent <PlayerItem> ().OnClick ();
+					GO.GetComponent <PlayerItem> ().ForceAdd ();
 			}
 			else if (PD.Position == "W") {
 				GameObject GO = Instantiate (PlayerPrefab);
@@ -197,12 +209,13 @@ public class TeamManager : MonoBehaviour {
 				GO.transform.localScale = Vector3.one;
 				W_Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (W_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists(x=>x.PlayerID==PD.PlayerID))
-					GO.GetComponent <PlayerItem> ().OnClick ();
+					GO.GetComponent <PlayerItem> ().ForceAdd ();
 			}
 				
 		}
 
 		foreach (PlayerData PD in SelectedMatch.Team2Players) {
+			
 			if (PD.Position == "BA") {
 				GameObject GO = Instantiate (PlayerPrefab);
 				GO.transform.SetParent (BA_Content.transform);
@@ -212,7 +225,7 @@ public class TeamManager : MonoBehaviour {
 				GO.transform.localScale = Vector3.one;
 				BA_Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (BA_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists(x=>x.PlayerID==PD.PlayerID))
-					GO.GetComponent <PlayerItem> ().OnClick ();
+					GO.GetComponent <PlayerItem> ().ForceAdd ();
 			}
 			else if (PD.Position == "BL") {
 				GameObject GO = Instantiate (PlayerPrefab);
@@ -223,7 +236,7 @@ public class TeamManager : MonoBehaviour {
 				GO.transform.localScale = Vector3.one;
 				BL_Content.GetComponent <RectTransform> ().sizeDelta = new Vector2 (BL_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists(x=>x.PlayerID==PD.PlayerID))
-					GO.GetComponent <PlayerItem> ().OnClick ();
+					GO.GetComponent <PlayerItem> ().ForceAdd ();
 			}
 			else if (PD.Position == "AR") {
 				GameObject GO = Instantiate (PlayerPrefab);
@@ -234,7 +247,7 @@ public class TeamManager : MonoBehaviour {
 				GO.transform.localScale = Vector3.one;
 				AR_Content.GetComponent <RectTransform> ().sizeDelta = new Vector2 (AR_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists(x=>x.PlayerID==PD.PlayerID))
-					GO.GetComponent <PlayerItem> ().OnClick ();
+					GO.GetComponent <PlayerItem> ().ForceAdd ();
 			}
 			else if (PD.Position == "W") {
 				GameObject GO = Instantiate (PlayerPrefab);
@@ -245,9 +258,28 @@ public class TeamManager : MonoBehaviour {
 				GO.transform.localScale = Vector3.one;
 				W_Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (W_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists(x=>x.PlayerID==PD.PlayerID))
-					GO.GetComponent <PlayerItem> ().OnClick ();
+					GO.GetComponent <PlayerItem> ().ForceAdd ();
 			}
 
 		}
+	}
+	public void ResetListings(){
+		CreditsRemaining = 100;
+		AR_Count = 0;
+		BA_Count = 0;
+		BL_Count = 0;
+		WK_Count = 0;
+		TeamCount = 0;
+		MyList.Clear ();
+		ClearListing(BA_Content.transform);
+		ClearListing(BL_Content.transform);
+		ClearListing(AR_Content.transform);
+		ClearListing(W_Content.transform);
+	}
+
+	public void ClearListing(Transform Content){
+		foreach (Transform Child in Content)
+			Destroy (Child.gameObject);
+		Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (0, 180);
 	}
 }

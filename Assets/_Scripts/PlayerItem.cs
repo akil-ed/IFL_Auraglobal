@@ -29,6 +29,7 @@ public class PlayerItem : MonoBehaviour {
 		else
 			SliderImage.color = Color.green;
 	}
+
 	public void OnClick(){
 		//print(TeamManager.instance.BA_Count);
 
@@ -64,5 +65,11 @@ public class PlayerItem : MonoBehaviour {
 		}
 		isActive.SetActive (!isActive.activeSelf);
 		
+	}
+
+	public void ForceAdd(){
+		print ("dd");
+		TeamManager.instance.AddPlayer (_PlayerData);
+		isActive.SetActive (true);
 	}
 }

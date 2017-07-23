@@ -45,7 +45,7 @@ public class AppUIManager : MonoBehaviour {
 		if (state)
 			LoadingPage.Show (false);
 		else
-			LoadingPage.Hide (true);
+			LoadingPage.Hide (false);
 
 	}
 
@@ -158,7 +158,7 @@ public class AppUIManager : MonoBehaviour {
 	}
 
 	public void OpenReview(){
-		PlayerSelection.Hide (true);
+		PlayerSelection.Hide (false);
 		PlayerReview.Show (false);
 	}
 

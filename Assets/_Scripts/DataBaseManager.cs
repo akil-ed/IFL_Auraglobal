@@ -109,7 +109,7 @@ public class DataBaseManager : MonoBehaviour {
 				var Team2Data = JsonConvert.DeserializeObject<Dictionary<string,object>> (internalData.Where (a => a.Key.Contains ("Team2Players")).First ().Value.ToString ());
 				for (int k = 0; k < Team2Data.Count; k++) {
 					PlayerData _PlayerData = new PlayerData ();
-					_PlayerData.PlayerID = Team1Data.ElementAt (k).Key.ToString ();
+					_PlayerData.PlayerID = Team2Data.ElementAt (k).Key.ToString ();
 					var internalPlayerData = JsonConvert.DeserializeObject<Dictionary<string,string>> (Team2Data.ElementAt(k).Value.ToString()); 
 					_PlayerData.Name = internalPlayerData.Where (a=>a.Key.Contains("Name")).First().Value.ToString();
 					_PlayerData.Credit = float.Parse (internalPlayerData.Where (a=>a.Key.Contains("Credit")).First().Value.ToString());
@@ -136,7 +136,7 @@ public class DataBaseManager : MonoBehaviour {
 		foreach (TournamentData TD in TournamentList) {
 			foreach (MatchData _MatchData in TD.Tournaments) {
 				GameObject GO = Instantiate (MatchPrefab);
-				GO.transform.parent = MatchContent.transform;
+				GO.transform.SetParent (MatchContent.transform);
 				GO.GetComponent <MatchItem> ().ItemDetails = _MatchData;
 				GO.GetComponent <MatchItem> ().TournamentName = TD.TournamentName;
 				GO.GetComponent <MatchItem> ().AssignValues ();

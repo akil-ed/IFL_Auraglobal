@@ -48,6 +48,7 @@ public class PlayerReviewItem : MonoBehaviour {
 		_PlayerData.isCaptain = true;
 		CapBtn.sprite = ActiveImg;
 		CapText.SetActive (true);
+		TeamManager.instance.isCaptainSelected = true;
 	}
 
 	public void OnVC(){
@@ -57,5 +58,6 @@ public class PlayerReviewItem : MonoBehaviour {
 		_PlayerData.isViceCaptain = true;
 		VCBtn.sprite = ActiveImg;
 		VCText.SetActive (true);
+		TeamManager.instance.isVCSelected = true;
 	}
 }
