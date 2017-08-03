@@ -68,7 +68,6 @@ public class PlayerItem : MonoBehaviour {
 	}
 
 	public void ForceAdd(){
-		print ("dd");
 		TeamManager.instance.AddPlayer (_PlayerData);
 		isActive.SetActive (true);
 	}

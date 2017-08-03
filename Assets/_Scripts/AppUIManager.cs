@@ -6,14 +6,15 @@ using DoozyUI;
 
 public class AppUIManager : MonoBehaviour {
 	public Sprite MainPageHighLightActive,MainPageHighLightInactive;
-	public static int MainPageState,RoleState;
-	public Image[] MainPageButtons;
-	public GameObject[] MainPageItems;
+	public GameObject Cam3D;
+	public static int MainPageState,RoleState,LeaguePageState;
+	public Image[] MainPageButtons,LeaguePageButtons;
+	public GameObject[] MainPageItems,LeaguePageItems;
 
 	public Image[] RoleButtons;
 	public GameObject[] RoleViews;
 
-	public UIElement HomePage,PlayerSelection, PlayerReview;
+	public UIElement HomePage,PlayerSelection, PlayerReview,LeaguesPage;
 	public Text PlayerCount, CreditsRemaining;
 
 	public UIElement LoadingPage;
@@ -98,6 +99,7 @@ public class AppUIManager : MonoBehaviour {
 	}
 
 
+
 	public void SetRoleState(int state){
 		RoleState = state;
 		CheckRoleState ();
@@ -144,6 +146,37 @@ public class AppUIManager : MonoBehaviour {
 
 	}
 
+	public void SetLeaguePageState(int state){
+		LeaguePageState = state;
+		CheckLeaguePageState ();
+	}
+
+	public void CheckLeaguePageState(){
+		switch (LeaguePageState) {
+		case 0:
+			LeaguePageInactive ();
+			LeaguePageButtons [0].sprite = MainPageHighLightActive;
+			LeaguePageItems [0].SetActive (true);
+			break;
+		case 1:
+			LeaguePageInactive ();
+			LeaguePageButtons [1].sprite = MainPageHighLightActive;
+			LeaguePageItems [1].SetActive (true);
+			break;
+		}
+	}
+
+	public void LeaguePageInactive(){
+
+		LeaguePageButtons [0].sprite = MainPageHighLightInactive;
+		LeaguePageButtons [1].sprite = MainPageHighLightInactive;
+
+		LeaguePageItems [0].SetActive (false);
+		LeaguePageItems [1].SetActive (false);
+
+	}
+
+
 	public void UpdateCredits(string s){
 		CreditsRemaining.text = "Credits remaining : "+s;
 	}
@@ -158,6 +191,7 @@ public class AppUIManager : MonoBehaviour {
 	}
 
 	public void OpenReview(){
+	//	Cam3D.SetActive (false);
 		PlayerSelection.Hide (false);
 		PlayerReview.Show (false);
 	}

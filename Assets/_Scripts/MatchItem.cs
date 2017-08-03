@@ -11,6 +11,7 @@ public class MatchItem : MonoBehaviour {
 	public GameObject LiveImage;
 	TimeSpan TimeDifference;
 	public bool isLive;
+	public int TournamentIndex,MatchIndex;
 	// Use this for initialization
 	void Start () {
 		
@@ -45,7 +46,11 @@ public class MatchItem : MonoBehaviour {
 	public void Join(){
 		AppUIManager.instance.HomePage.Hide (true);
 
+		TeamManager.instance.SelectedTournamentIndex = TournamentIndex;
+		TeamManager.instance.SelectedMatchIndex = MatchIndex;
 		TeamManager.instance.SelectedMatch = ItemDetails;
-		TeamManager.instance.DisplayListings (ItemDetails);
+		TeamManager.instance.CreateLeagueListing ();
+		TeamManager.instance.DisplayListings ();
+
 	}
 }

@@ -23,10 +23,17 @@ public class PlayerReviewItem : MonoBehaviour {
 	public void Assign(){
 		NameTxt.text = _PlayerData.Name;
 		RoleTxt.text = _PlayerData.Position;
+
+
 		if (_PlayerData.isCaptain)
 			OnCap ();
+		else
+			ClearCap ();
+		
 		if (_PlayerData.isViceCaptain)
 			OnVC ();
+		else
+			ClearVC ();
 	}
 
 	public void ClearCap(){

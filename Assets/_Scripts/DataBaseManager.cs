@@ -9,13 +9,22 @@ using DoozyUI;
 using Newtonsoft.Json;
 using System.Linq;
 using System;
+using UnityEngine.UI;
 
 public class DataBaseManager : MonoBehaviour {
-	public GameObject MatchPrefab;
+	public GameObject MatchPrefab,TeamNameWindow;
 	public DateTime testtime;
 	public List<TournamentData> TournamentList;
 
+	public UserData Udata = new UserData();
 	public GameObject MatchContent;
+	public InputField TeamNameTxt;
+
+	public static DataBaseManager instance = null;
+
+	void Awake(){
+		instance = this;
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -40,6 +49,62 @@ public class DataBaseManager : MonoBehaviour {
 		UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, s, test);
 	}
 
+	public void ReadDataBase(){
+		ReadUserData ();
+	}
+
+	public void ReadUserData(){
+	/*	if (Application.isEditor) {
+			Udata.DisplayName = "Editor";
+			Udata.DisplayName = "Editor";
+			Udata.Email = "EditorMail";
+			Udata.Balance = 10000;
+			return;
+		}
+*/
+		FirebaseDatabase.DefaultInstance
+			.GetReference("Users/"+AuthenticationManager.UserEmail)
+			.GetValueAsync().ContinueWith(task => {
+				if (task.IsFaulted) {
+					DebugLog(task.Exception.ToString ());
+				}
+				else if (task.IsCompleted) {
+					DataSnapshot snapshot = task.Result;
+					string JsonValue = snapshot.GetRawJsonValue ();
+					//print(JsonValue);
+					SaveUserData(JsonValue);
+				}
+			}); 
+	}
+
+	public void SaveUserData(string JsonValue){
+		//print (JsonValue);
+		var User = JsonConvert.DeserializeObject<Dictionary<string, object>> (JsonValue);
+		Udata.DisplayName = User.Where (a=>a.Key.Contains("DisplayName")).First().Value.ToString();
+		try{
+		Udata.TeamName = User.Where (a=>a.Key.Contains("TeamName")).First().Value.ToString();
+		}
+		catch{
+			TeamNameWindow.SetActive (true);
+		}
+		Udata.Email = User.Where (a=>a.Key.Contains("Email")).First().Value.ToString();
+		Udata.UserID = User.Where (a=>a.Key.Contains("UserID")).First().Value.ToString();
+		Udata.Balance = float.Parse (User.Where (a=>a.Key.Contains("Balance")).First().Value.ToString());
+		AuthenticationManager.TeamName = Udata.TeamName;
+		ReadTournamentData ();
+	}
+
+	public void SaveTeamName(){
+		FirebaseDatabase.DefaultInstance
+			.GetReference ("Users/"+AuthenticationManager.UserEmail)
+			.Child ("TeamName")
+			.SetValueAsync (TeamNameTxt.text);
+
+		Udata.TeamName = TeamNameTxt.text;
+		AuthenticationManager.TeamName = Udata.TeamName;
+		TeamNameWindow.SetActive (false);
+	}
+
 	public void ReadTournamentData(){
 		UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, "Loading Server Data", test);
 		AppUIManager.instance.Loading (true);
@@ -61,6 +126,7 @@ public class DataBaseManager : MonoBehaviour {
 	}
 
 	public void SaveTournamentData(string JsonValue){
+		print (JsonValue);
 		var Tournaments = JsonConvert.DeserializeObject<Dictionary<string, object>> (JsonValue);
 		for (int i = 0; i < Tournaments.Count; i++) { // Tournament Loop
 			TournamentData _TournamentData = new TournamentData();
@@ -75,8 +141,8 @@ public class DataBaseManager : MonoBehaviour {
 				_MatchData.Team2 = internalData.Where (a=>a.Key.Contains("Team2")).First().Value.ToString();
 				_MatchData.Date = DateTime.Parse (internalData.Where (a=>a.Key.Contains("Date")).First().Value.ToString());
 				try{
-				var TotalUserData = JsonConvert.DeserializeObject<Dictionary<string,object>> (internalData.Where (a => a.Key.Contains ("Users")).First ().Value.ToString ());
-					var UserData = JsonConvert.DeserializeObject<Dictionary<string,object>> (TotalUserData.Where (a => a.Key.Contains (AuthenticationManager.UserEmail)).First ().Value.ToString ());
+					var TotalUserData = JsonConvert.DeserializeObject<Dictionary<string,object>> (internalData.Where (a => a.Key.Contains ("Users")).First ().Value.ToString ());
+					var UserData = JsonConvert.DeserializeObject<Dictionary<string,object>> (TotalUserData.Where (a => a.Key.Contains (AuthenticationManager.TeamName)).First ().Value.ToString ());
 					for (int k = 0; k < UserData.Count; k++) { // User team loop if exists
 						PlayerData _PlayerData = new PlayerData ();
 						_PlayerData.PlayerID = UserData.ElementAt (k).Key.ToString ();
@@ -94,8 +160,6 @@ public class DataBaseManager : MonoBehaviour {
 				catch{
 					
 				}
-				//print (UserData.Count);
-				//print (UserData.ToString ());
 				var Team1Data = JsonConvert.DeserializeObject<Dictionary<string,object>> (internalData.Where (a => a.Key.Contains ("Team1Players")).First ().Value.ToString ());
 				for (int k = 0; k < Team1Data.Count; k++) {
 					PlayerData _PlayerData = new PlayerData ();
@@ -117,9 +181,88 @@ public class DataBaseManager : MonoBehaviour {
 
 					_MatchData.Team2Players.Add (_PlayerData);
 				}
+				var FreeLeagueData = JsonConvert.DeserializeObject<Dictionary<string,object>> (internalData.Where (a => a.Key.Contains ("FreeLeagues")).First ().Value.ToString ());
+				for (int k = 0; k < FreeLeagueData.Count; k++) {
+					LeagueData _LeagueData = new LeagueData ();
+					var internalLeagueData = JsonConvert.DeserializeObject<Dictionary<string,object>> (FreeLeagueData.ElementAt(k).Value.ToString()); 
+					_LeagueData.EntryFee = int.Parse (internalLeagueData.Where (a=>a.Key.Contains("EntryFee")).First().Value.ToString());
+					_LeagueData.TotalTeams = int.Parse (internalLeagueData.Where (a=>a.Key.Contains("TotalTeams")).First().Value.ToString());
+					bool isJoined=false;
+					try{
+						var EnteredTeamsData = JsonConvert.DeserializeObject<Dictionary<string,object>> (internalLeagueData.Where (a => a.Key.Contains ("EnteredTeams")).First ().Value.ToString ());
+						for(int l=0;l<EnteredTeamsData.Count;l++){
+							TeamData _TeamData = new TeamData();
+							var TeamData = JsonConvert.DeserializeObject<Dictionary<string, object>> (EnteredTeamsData.ElementAt(l).Value.ToString());
+							_TeamData.TeamName = EnteredTeamsData.ElementAt (l).Key.ToString ();
+							if(_TeamData.TeamName==AuthenticationManager.TeamName)
+								isJoined=true;
+							for (int b = 0; b < TeamData.Count; b++) { // Entered teams loop if exists
+								PlayerData _PlayerData = new PlayerData ();
+								_PlayerData.PlayerID = TeamData.ElementAt (b).Key.ToString ();
+								var internalPlayerData = JsonConvert.DeserializeObject<Dictionary<string,string>> (TeamData.ElementAt(b).Value.ToString()); 
+								_PlayerData.Name = internalPlayerData.Where (a=>a.Key.Contains("Name")).First().Value.ToString();
+								_PlayerData.Credit = float.Parse (internalPlayerData.Where (a=>a.Key.Contains("Credit")).First().Value.ToString());
+								_PlayerData.Position = internalPlayerData.Where (a=>a.Key.Contains("Position")).First().Value.ToString();
+								if(internalPlayerData.Where (a=>a.Key.Contains("isCaptain")).First().Value.ToString()=="true")
+									_PlayerData.isCaptain=true;
+								if(internalPlayerData.Where (a=>a.Key.Contains("isViceCaptain")).First().Value.ToString()=="true")
+									_PlayerData.isViceCaptain=true;
+								_TeamData.PlayerList.Add (_PlayerData);
+
+							}
+							_LeagueData.EnteredTeams.Add (_TeamData);
+						}
+					}
+					catch{
+						
+					}
+					_MatchData.FreeLeagues.Add (_LeagueData);
+					if(isJoined)
+						_MatchData.MyLeagues.Add (_LeagueData);
+				}
+				var PaidLeagueData = JsonConvert.DeserializeObject<Dictionary<string,object>> (internalData.Where (a => a.Key.Contains ("PaidLeagues")).First ().Value.ToString ());
+				for (int k = 0; k < PaidLeagueData.Count; k++) {
+					LeagueData _LeagueData = new LeagueData ();
+					var internalLeagueData = JsonConvert.DeserializeObject<Dictionary<string,object>> (PaidLeagueData.ElementAt(k).Value.ToString()); 
+					_LeagueData.EntryFee = int.Parse (internalLeagueData.Where (a=>a.Key.Contains("EntryFee")).First().Value.ToString());
+					_LeagueData.TotalTeams = int.Parse (internalLeagueData.Where (a=>a.Key.Contains("TotalTeams")).First().Value.ToString());
+					bool isJoined=false;
+					try{
+						var EnteredTeamsData = JsonConvert.DeserializeObject<Dictionary<string,object>> (internalLeagueData.Where (a => a.Key.Contains ("EnteredTeams")).First ().Value.ToString ());
+						for(int l=0;l<EnteredTeamsData.Count;l++){
+							TeamData _TeamData = new TeamData();
+							var TeamData = JsonConvert.DeserializeObject<Dictionary<string, object>> (EnteredTeamsData.ElementAt(l).Value.ToString());
+							_TeamData.TeamName = EnteredTeamsData.ElementAt (l).Key.ToString ();
+							if(_TeamData.TeamName==AuthenticationManager.TeamName)
+								isJoined=true;
+							for (int b = 0; b < TeamData.Count; b++) { // Entered teams loop if exists
+								PlayerData _PlayerData = new PlayerData ();
+								_PlayerData.PlayerID = TeamData.ElementAt (b).Key.ToString ();
+								var internalPlayerData = JsonConvert.DeserializeObject<Dictionary<string,string>> (TeamData.ElementAt(b).Value.ToString()); 
+								_PlayerData.Name = internalPlayerData.Where (a=>a.Key.Contains("Name")).First().Value.ToString();
+								_PlayerData.Credit = float.Parse (internalPlayerData.Where (a=>a.Key.Contains("Credit")).First().Value.ToString());
+								_PlayerData.Position = internalPlayerData.Where (a=>a.Key.Contains("Position")).First().Value.ToString();
+								if(internalPlayerData.Where (a=>a.Key.Contains("isCaptain")).First().Value.ToString()=="true")
+									_PlayerData.isCaptain=true;
+								if(internalPlayerData.Where (a=>a.Key.Contains("isViceCaptain")).First().Value.ToString()=="true")
+									_PlayerData.isViceCaptain=true;
+								_TeamData.PlayerList.Add (_PlayerData);
+
+							}
+							_LeagueData.EnteredTeams.Add (_TeamData);
+						}
+					}
+					catch{
+
+					}
+					_MatchData.PaidLeagues.Add (_LeagueData);
+					if(isJoined)
+						_MatchData.MyLeagues.Add (_LeagueData);
+				}
 				_TournamentData.Tournaments.Add (_MatchData);
-				//CreateObjects (_MatchData);
+
 			}
+			_TournamentData.Tournaments.Sort((x, y) => x.Date.CompareTo(y.Date));
 			TournamentList.Add (_TournamentData);
 		}
 		CreateObjects();
@@ -127,12 +270,10 @@ public class DataBaseManager : MonoBehaviour {
 		UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, "Data retrieved", test);
 	}
 
-	public void UserTeam(string JsonValue){
-
-	}
-
 
 	public void CreateObjects(){
+		ClearListing (MatchContent.transform);
+
 		foreach (TournamentData TD in TournamentList) {
 			foreach (MatchData _MatchData in TD.Tournaments) {
 				GameObject GO = Instantiate (MatchPrefab);
@@ -142,9 +283,14 @@ public class DataBaseManager : MonoBehaviour {
 				GO.GetComponent <MatchItem> ().AssignValues ();
 				GO.transform.localScale = Vector3.one;
 				MatchContent.GetComponent <RectTransform> ().sizeDelta = new Vector2 (563, MatchContent.GetComponent <RectTransform> ().rect.height + 350);
-				//MatchContent.GetComponent <RectTransform> ().rect = new Rect (MatchContent.GetComponent <RectTransform> ().rect.x,MatchContent.GetComponent <RectTransform> ().rect.y,MatchContent.GetComponent <RectTransform> ().rect.width,MatchContent.GetComponent <RectTransform> ().rect.height+340);
 			}
 		}
+	}
+
+	public void ClearListing(Transform Content){
+		foreach (Transform Child in Content)
+			Destroy (Child.gameObject);
+		Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (563, 0);
 	}
 
 }
@@ -153,6 +299,7 @@ public class DataBaseManager : MonoBehaviour {
 public class TournamentData
 {
 	public string TournamentName;
+	public int index;
 	public List<MatchData> Tournaments = new List<MatchData>();
 }
 
@@ -160,12 +307,16 @@ public class TournamentData
 public class MatchData
 {
 	public string MatchName;
+	public int index;
 	public string TournamentName;
 	public string Team1;
 	public string Team2;
 	public List<PlayerData> Team1Players = new List<PlayerData>();
 	public List<PlayerData> Team2Players = new List<PlayerData>();
 	public List<PlayerData> MyTeam = new List<PlayerData>();
+	public List<LeagueData> FreeLeagues = new List<LeagueData> ();
+	public List<LeagueData> PaidLeagues = new List<LeagueData> ();
+	public List<LeagueData> MyLeagues = new List<LeagueData> ();
 	public DateTime Date;
 }
 
@@ -173,6 +324,7 @@ public class MatchData
 public class PlayerData
 {
 	public string Name;
+	public string TeamName;
 	public string PlayerID;
 	public float Credit;
 	public string Position;
@@ -180,4 +332,20 @@ public class PlayerData
 	public bool isViceCaptain=false;
 	public int Score=0;
 	public float FantasyPoints=0;
+}
+
+[System.Serializable]
+public class LeagueData
+{
+	public int EntryFee;
+	public int TotalTeams;
+	public int Winnings;
+	public List<TeamData> EnteredTeams = new List<TeamData>();
+}
+
+[System.Serializable]
+public class TeamData
+{
+	public string TeamName;
+	public List<PlayerData> PlayerList = new List<PlayerData>();
 }

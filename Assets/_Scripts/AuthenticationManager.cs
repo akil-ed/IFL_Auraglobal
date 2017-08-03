@@ -12,10 +12,12 @@ using DoozyUI;
 //using Facebook.Unity;
 using Firebase.Messaging;
 
+using Newtonsoft.Json;
+
 
 public class AuthenticationManager : MonoBehaviour {
 	Firebase.Auth.FirebaseAuth auth;
-	Firebase.Auth.FirebaseUser user;
+	public static Firebase.Auth.FirebaseUser user;
 
 	Firebase.DependencyStatus dependencyStatus = Firebase.DependencyStatus.UnavailableOther;
 
@@ -23,8 +25,8 @@ public class AuthenticationManager : MonoBehaviour {
 	public InputField Email, Password;
 	public InputField ResetEmail;
 	public Text logText;
-
 	public static string UserEmail="Editor";
+	public static string TeamName="EditorTeam";
 
 	public UIElement HomePage, SignInPage, SignUpPage, MainPage, LoadingPage;
 	public DisplayInfo _DisplayInfo;
@@ -176,7 +178,24 @@ public class AuthenticationManager : MonoBehaviour {
 			PhotoUrl = user.PhotoUrl,
 		}).ContinueWith(HandleUpdateUserProfile);
 
+		UserData UData = new UserData ();
+
+		UData.DisplayName = RegisterUserName.text;
+		UData.Email = user.Email;
+		UData.UserID = user.UserId;
+		UData.isEmailVerified = user.IsEmailVerified;
+		UData.Balance = 100;
+
+		UpdateUserDb (UData);
 	}
+
+	public void UpdateUserDb(UserData UData){
+		DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+		reference.Child ("Users").Child (UData.UserID)
+			.SetRawJsonValueAsync (JsonConvert.SerializeObject (UData));
+	
+	}
+
 
 	void HandleUpdateUserProfile(Task authTask) {
 
@@ -469,11 +488,27 @@ public class AuthenticationManager : MonoBehaviour {
 			if(user.UserId!="")
 			UserEmail = user.UserId;
 
+		//WriteEditorData ();
+
 		//DebugLog (UserEmail+"ID");
 		//DisplayInfo ();
-		GetComponent <DataBaseManager>().ReadTournamentData ();
+		GetComponent <DataBaseManager>().ReadDataBase ();
 		//_DisplayInfo.OnEnable ();
 	}
+
+	void WriteEditorData(){
+		UserData temp = new UserData();
+
+		temp.DisplayName = "Editor";
+		temp.Email = "Editor@gmail.com";
+		temp.UserID = UserEmail;
+		temp.Balance = 10000;
+
+
+		UpdateUserDb (temp);
+	}
+
+
 
 	void DisplayInfo(){
 		_DisplayInfo.UserName.text = user.DisplayName;
@@ -493,3 +528,16 @@ public class AuthenticationManager : MonoBehaviour {
 
 }
 
+[System.Serializable]
+public class UserData
+{
+	public string DisplayName;
+	public string Email;
+	public string UserID;
+	public string ImgURL="URL";
+	public string TeamName;
+	public float Balance = 0.0f;
+	public bool isEmailVerified = false;
+	public bool isMobileVerified = false;
+	public bool isProofVerified = false;
+}

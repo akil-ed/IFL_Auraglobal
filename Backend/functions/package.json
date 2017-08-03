@@ -3,7 +3,7 @@
   "description": "Test",
   "dependencies": {
     "firebase-admin": "^4.1.1",
-    "firebase-functions": "^0.5.1"
+    "firebase-functions": "^0.5.9"
   },
   "devDependencies": {
     "chai": "^3.5.0",
