@@ -9,7 +9,7 @@ public class TeamManager : MonoBehaviour {
 	public int SelectedTournamentIndex,SelectedMatchIndex;
 	public GameObject PlayerPrefab,LeaguePrefab;
 	public static TeamManager instance = null;
-	public GameObject BA_Content, BL_Content, AR_Content, W_Content,FreeLeague_Content,PaidLeague_Content;
+	public GameObject BA_Content, BL_Content, AR_Content, W_Content,FreeLeague_Content,PaidLeague_Content,JoinedLeague_Content;
 	public List<PlayerData> MyList = new List<PlayerData>();
 	public int BA_Count, BL_Count, AR_Count, WK_Count, TeamCount;
 	public bool isCaptainSelected, isVCSelected;
@@ -50,6 +50,7 @@ public class TeamManager : MonoBehaviour {
 		}
 		CreditsRemaining -= _PlayerData.Credit;
 		TeamCount++;
+		AppUIManager.instance.UpdatePlayerCounts (BA_Count, BL_Count, AR_Count, WK_Count, TeamCount);
 		MyList.Add (_PlayerData);
 		AppUIManager.instance.UpdateCredits (CreditsRemaining.ToString ());
 		AppUIManager.instance.UpdatePlayerCount (TeamCount.ToString ());
@@ -70,6 +71,7 @@ public class TeamManager : MonoBehaviour {
 		}
 		CreditsRemaining += _PlayerData.Credit;
 		TeamCount--;
+		AppUIManager.instance.UpdatePlayerCounts (BA_Count, BL_Count, AR_Count, WK_Count, TeamCount);
 		MyList.Remove (_PlayerData);
 		AppUIManager.instance.UpdateCredits (CreditsRemaining.ToString ());
 		AppUIManager.instance.UpdatePlayerCount (TeamCount.ToString ());
@@ -153,7 +155,7 @@ public class TeamManager : MonoBehaviour {
 		AppUIManager.instance.LeaguesPage.Show(true);
 	}
 
-	public void UpdateTeamFirebase(){
+	public void Show3D(){
 
 	}
 
@@ -181,6 +183,7 @@ public class TeamManager : MonoBehaviour {
 		} else {
 			//CreateReview ();
 			AppUIManager.instance.LeaguesPage.Show(false);
+			AppUIManager.instance.ContestJoinedTxt.text = "Contests Joined (" +SelectedMatch.MyLeagues.Count + ")";
 			foreach (PlayerData PD in SelectedMatch.MyTeam)
 				EntirePlayerList.Add (PD);
 			foreach (PlayerData PD in SelectedMatch.Team1Players)
@@ -200,7 +203,7 @@ public class TeamManager : MonoBehaviour {
 
 				GO.GetComponent <PlayerItem> ().AssignValues ();
 				GO.transform.localScale = Vector3.one;
-				BA_Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (BA_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
+				//BA_Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (BA_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists (x => x.PlayerID == PD.PlayerID))
 					GO.GetComponent <PlayerItem> ().ForceAdd ();
 
@@ -212,7 +215,7 @@ public class TeamManager : MonoBehaviour {
 
 				GO.GetComponent <PlayerItem> ().AssignValues ();
 				GO.transform.localScale = Vector3.one;
-				BL_Content.GetComponent <RectTransform> ().sizeDelta = new Vector2 (BL_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
+			//	BL_Content.GetComponent <RectTransform> ().sizeDelta = new Vector2 (BL_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists(x=>x.PlayerID==PD.PlayerID))
 					GO.GetComponent <PlayerItem> ().ForceAdd ();
 			}
@@ -223,7 +226,7 @@ public class TeamManager : MonoBehaviour {
 
 				GO.GetComponent <PlayerItem> ().AssignValues ();
 				GO.transform.localScale = Vector3.one;
-				AR_Content.GetComponent <RectTransform> ().sizeDelta = new Vector2 (AR_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
+				//AR_Content.GetComponent <RectTransform> ().sizeDelta = new Vector2 (AR_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists(x=>x.PlayerID==PD.PlayerID))
 					GO.GetComponent <PlayerItem> ().ForceAdd ();
 			}
@@ -234,7 +237,7 @@ public class TeamManager : MonoBehaviour {
 
 				GO.GetComponent <PlayerItem> ().AssignValues ();
 				GO.transform.localScale = Vector3.one;
-				W_Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (W_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
+				//W_Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (W_Content.GetComponent <RectTransform> ().rect.width + 220, 180);
 				if (SelectedMatch.MyTeam.Exists(x=>x.PlayerID==PD.PlayerID))
 					GO.GetComponent <PlayerItem> ().ForceAdd ();
 			}
@@ -268,6 +271,19 @@ public class TeamManager : MonoBehaviour {
 			GO.GetComponent <LeagueItem> ().LeagueNo = i;
 			GO.transform.localScale = Vector3.one;
 			i++;
+		}
+	}
+
+	public void JoinedLeague(){
+		foreach (Transform Child in JoinedLeague_Content.transform)
+			Destroy (Child.gameObject);
+
+		foreach (LeagueData LD in SelectedMatch.MyLeagues) {
+			GameObject GO = Instantiate (LeaguePrefab);
+			GO.transform.SetParent (JoinedLeague_Content.transform);
+			GO.GetComponent <LeagueItem> ()._LeagueData = LD;
+			GO.GetComponent <LeagueItem> ().AssignValues ();
+			GO.transform.localScale = Vector3.one;
 		}
 	}
 

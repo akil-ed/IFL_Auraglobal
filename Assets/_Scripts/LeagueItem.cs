@@ -13,6 +13,7 @@ public class LeagueItem : MonoBehaviour {
 	public Text WinningsTxt,CostTxt,TeamTxt,JoinTxt;
 	public int LeagueNo;
 	public string LeagueType="FreeLeagues";
+	public GameObject TeamGrid,TeamNamePrefab;
 	// Use this for initialization
 	void Start () {
 		
@@ -32,8 +33,15 @@ public class LeagueItem : MonoBehaviour {
 		}
 		CostTxt.text = "Rs " + _LeagueData.EntryFee;
 		TeamTxt.text = _LeagueData.EnteredTeams.Count+"/"+_LeagueData.TotalTeams+" Teams Joined";
-		if (_LeagueData.EnteredTeams.Exists (x => x.TeamName == AuthenticationManager.TeamName))
+		if (_LeagueData.EnteredTeams.Exists (x => x.TeamName == AuthenticationManager.TeamName)) {
+			JoinTxt.transform.parent.GetComponent <Button> ().interactable = false;
 			JoinTxt.text = "Joined";
+		}
+	}
+
+	public void OnClick(){
+		AppUIManager.instance.SelectedLeague._LeagueData = _LeagueData;
+		AppUIManager.instance.ShowSelectedLeague ();
 	}
 
 	public void JoinLeague(){
@@ -59,8 +67,7 @@ public class LeagueItem : MonoBehaviour {
 		_Slider.value = _LeagueData.EnteredTeams.Count+1;
 		TeamTxt.text = (_LeagueData.EnteredTeams.Count+1)+"/"+_LeagueData.TotalTeams+" Teams Joined";
 		JoinTxt.text = "Joined";
-
-
+		JoinTxt.transform.parent.GetComponent <Button> ().interactable = false;
 
 
 		if(LeagueType=="FreeLeagues")
@@ -68,6 +75,24 @@ public class LeagueItem : MonoBehaviour {
 		else
 			TeamManager.instance.SelectedMatch.PaidLeagues [LeagueNo - 1].EnteredTeams.Add (TD);
 
+		TeamManager.instance.SelectedMatch.MyLeagues.Add (_LeagueData);
+		AppUIManager.instance.ContestJoinedTxt.text = "Contests Joined (" + TeamManager.instance.SelectedMatch.MyLeagues.Count + ")";
 		DataBaseManager.instance.TournamentList [TeamManager.instance.SelectedTournamentIndex].Tournaments [TeamManager.instance.SelectedMatchIndex] = TeamManager.instance.SelectedMatch;
+
+		//TeamManager.instance.CreateLeagueListing ();
+	}
+
+	public void ShowTeams(){
+		foreach (Transform Child in TeamGrid.transform)
+			Destroy (Child.gameObject);
+
+	
+		foreach (TeamData TD in _LeagueData.EnteredTeams) {
+			GameObject GO = Instantiate (TeamNamePrefab);
+			GO.transform.SetParent (TeamGrid.transform);
+			GO.GetComponent <Text> ().text = TD.TeamName;
+			GO.transform.localScale = Vector3.one;
+
+		}
 	}
 }

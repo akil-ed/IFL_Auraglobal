@@ -28,16 +28,12 @@ public class DataBaseManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//print (System.DateTime.Now.ToString ());
-		//testtime = DateTime.Parse ("7/20/2017 5:02:22 AM");
 
 		FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://incrediblefl-affdd.firebaseio.com/");
 		FirebaseApp.DefaultInstance.SetEditorP12FileName("IncredibleFL-2439fb8aec19.p12");
 		FirebaseApp.DefaultInstance.SetEditorServiceAccountEmail("akil03@incrediblefl-affdd.iam.gserviceaccount.com");
 		FirebaseApp.DefaultInstance.SetEditorP12Password("notasecret");
 
-		//ReadTournamentData ();
-		//Incredible Fantasy League-bc7f14f186df.p12
 	}
 	
 	// Update is called once per frame
@@ -91,6 +87,7 @@ public class DataBaseManager : MonoBehaviour {
 		Udata.UserID = User.Where (a=>a.Key.Contains("UserID")).First().Value.ToString();
 		Udata.Balance = float.Parse (User.Where (a=>a.Key.Contains("Balance")).First().Value.ToString());
 		AuthenticationManager.TeamName = Udata.TeamName;
+		AppUIManager.instance.UpdateUserData ();
 		ReadTournamentData ();
 	}
 
@@ -103,6 +100,7 @@ public class DataBaseManager : MonoBehaviour {
 		Udata.TeamName = TeamNameTxt.text;
 		AuthenticationManager.TeamName = Udata.TeamName;
 		TeamNameWindow.SetActive (false);
+		AppUIManager.instance.UpdateUserData ();
 	}
 
 	public void ReadTournamentData(){
@@ -131,11 +129,13 @@ public class DataBaseManager : MonoBehaviour {
 		for (int i = 0; i < Tournaments.Count; i++) { // Tournament Loop
 			TournamentData _TournamentData = new TournamentData();
 			_TournamentData.TournamentName = Tournaments.ElementAt (i).Key.ToString ();
+			_TournamentData.index = i;
 			var Matches = JsonConvert.DeserializeObject<Dictionary<string, object>> (Tournaments.ElementAt(i).Value.ToString());
 			for (int j = 0; j < Matches.Count; j++) { // Games in each Tournament Loop
 				MatchData _MatchData = new MatchData ();
 				_MatchData.MatchName = Matches.ElementAt (j).Key.ToString ();
 				_MatchData.TournamentName = _TournamentData.TournamentName;
+				_MatchData.index = j;
 				var internalData = JsonConvert.DeserializeObject<Dictionary<string,object>> (Matches.ElementAt(j).Value.ToString()); 
 				_MatchData.Team1 = internalData.Where (a=>a.Key.Contains("Team1")).First().Value.ToString();
 				_MatchData.Team2 = internalData.Where (a=>a.Key.Contains("Team2")).First().Value.ToString();
