@@ -156,6 +156,31 @@ public class TeamManager : MonoBehaviour {
 	}
 
 	public void Show3D(){
+		if (BA_Count < 3) {
+			AppUIManager.instance.DebugLog ("Pick Atleast 3 Batsmen");
+			AppUIManager.instance.SetRoleState (1);
+			return;
+		} else if (BL_Count < 3) {
+			AppUIManager.instance.DebugLog ("Pick Atleast 3 Bowlers");
+			AppUIManager.instance.SetRoleState (2);
+			return;
+		} else if (AR_Count < 1) {
+			AppUIManager.instance.DebugLog ("Pick Atleast 1 All Rounder");
+			AppUIManager.instance.SetRoleState (3);
+			return;
+		} else if (WK_Count < 1) {
+			AppUIManager.instance.DebugLog ("Pick 1 WicketKeeper");
+			AppUIManager.instance.SetRoleState (4);
+			return;
+		} else if (MyList.Count < 11) {
+			AppUIManager.instance.DebugLog ("Pick 11 Players");
+			return;
+		}
+
+		AppUIManager.instance.ShowPreview ();
+	}
+
+	public void BackPreview(){
 
 	}
 

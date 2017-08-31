@@ -9,7 +9,7 @@ using Firebase.Database;
 using Firebase.Unity.Editor;
 using DG.Tweening;
 using DoozyUI;
-//using Facebook.Unity;
+using Facebook.Unity;
 using Firebase.Messaging;
 
 using Newtonsoft.Json;
@@ -47,8 +47,7 @@ public class AuthenticationManager : MonoBehaviour {
 		} else {
 			InitializeFirebase();
 		}
-		//OpenMainPage ();
-		//Invoke ("OpenMainPage", 1);
+
 
 	}
 
@@ -113,8 +112,8 @@ public class AuthenticationManager : MonoBehaviour {
 
 				DisplayUserInfo(user, 1);
 
-
-				OpenMainPage ();
+				if(!FB.IsLoggedIn)
+					OpenMainPage ();
 
 				var providerDataList = new List<Firebase.Auth.IUserInfo>(user.ProviderData);
 				if (providerDataList.Count > 0) {
@@ -184,7 +183,7 @@ public class AuthenticationManager : MonoBehaviour {
 		UData.Email = user.Email;
 		UData.UserID = user.UserId;
 		UData.isEmailVerified = user.IsEmailVerified;
-		UData.Balance = 100;
+		UData.Balance = 500;
 
 		UpdateUserDb (UData);
 	}
@@ -211,7 +210,7 @@ public class AuthenticationManager : MonoBehaviour {
 		auth.SignInWithEmailAndPasswordAsync(Email.text, Password.text)
 			.ContinueWith(HandleSigninResult);
 	}
-	/*
+
 	public void LoginFB(){
 		StartCoroutine (LoadPage ());
 		StartCoroutine (FBSignIn ());
@@ -241,6 +240,7 @@ public class AuthenticationManager : MonoBehaviour {
 		{
 			profile = JsonUtility.FromJson<MyFacebookInfo>(result.RawResult);
 
+			/*
 			FB.API("/me?fields=email", HttpMethod.GET, graphResult =>
 				{
 					if (string.IsNullOrEmpty(graphResult.Error) == false)
@@ -250,8 +250,11 @@ public class AuthenticationManager : MonoBehaviour {
 					}
 
 					profile.email = graphResult.ResultDictionary["email"] as string;
+					DebugLog (profile.email);
 				});
-			StartCoroutine (LoadImage (profile.picture.data.url));
+
+*/
+			//StartCoroutine (LoadImage (profile.picture.data.url));
 			//Login (profile.id);
 			SigninWithFB (AccessToken.CurrentAccessToken.TokenString);
 		}
@@ -268,7 +271,8 @@ public class AuthenticationManager : MonoBehaviour {
 				return;
 			}
 			if (task.IsFaulted) {
-				DebugLog("SignInWithCredentialAsync encountered an error: " + accessToken + task.Exception);
+				DebugLog("SignInWithCredentialAsync encountered an error: " + task.Exception);
+				Debug.Log(task.Exception);
 				return;
 			}
 			Firebase.Auth.FirebaseUser newUser = task.Result;
@@ -277,16 +281,29 @@ public class AuthenticationManager : MonoBehaviour {
 
 			//OpenMainPage();
 
-			//UpdateFBUser();
+			UpdateFBUser();
 
-			Debug.LogFormat("User signed in successfully: {0} ({1})", newUser.DisplayName, newUser.Email);
+			Debug.LogFormat("User signed in successfully: {0} ({1})", newUser.UserId, newUser.DisplayName);
 		});
+	}
+
+	void SaveFBUSerData(){
+		UserData UData = new UserData ();
+
+		UData.DisplayName = profile.name;
+		UData.Email = "Facebook account";
+		UData.UserID = user.UserId;
+		UData.isEmailVerified = user.IsEmailVerified;
+		UData.Balance = 500;
+
+		UpdateUserDb (UData);
 	}
 
 	void UpdateFBUser(){
 		Firebase.Auth.FirebaseUser user = auth.CurrentUser;
 		Firebase.Auth.UserProfile test;
 		string imageURL=profile.picture.data.url;
+		/*
 		user.UpdateEmailAsync (profile.email).ContinueWith(task => {
 			if (task.IsCanceled) {
 				Debug.LogError("UpdateUserProfileAsync was canceled.");
@@ -298,7 +315,7 @@ public class AuthenticationManager : MonoBehaviour {
 			}
 		});
 
-
+*/
 		if (user != null) {
 			Firebase.Auth.UserProfile profile = new Firebase.Auth.UserProfile {
 				DisplayName = user.DisplayName,
@@ -314,6 +331,7 @@ public class AuthenticationManager : MonoBehaviour {
 					Debug.LogError("UpdateUserProfileAsync encountered an error: " + task.Exception);
 					return;
 				}
+				SaveFBUSerData();
 				OpenMainPage();
 				Debug.Log("User profile updated successfully.");
 			});
@@ -321,8 +339,13 @@ public class AuthenticationManager : MonoBehaviour {
 
 	}
 
-*/
+	public void InviteFriends(){
+		FB.Mobile.AppInvite(new Uri("https://fb.me/1594202067539799"), callback: this.HandleResult);
+	}
 
+	void HandleResult(IAppInviteResult Result){
+		Debug.Log (Result.RawResult);
+	}
 
 	// This is functionally equivalent to the Signin() function.  However, it
 	// illustrates the use of Credentials, which can be aquired from many
@@ -379,10 +402,15 @@ public class AuthenticationManager : MonoBehaviour {
 		DebugLog("Signing out.");
 		auth.SignOut();
 
+		if (FB.IsLoggedIn)
+			FB.LogOut ();
+
 		//MainPage.Hide (false);
 		//	SignUpPage.Hide (false);
 		//	SignInPage.Hide (false);
 		//HomePage.Show (false);
+		HomePage.gameObject.SetActive(true);
+		HomePage.Show (false);
 	}
 
 

@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+<head >
+</head>
+<body>
+
+<script>document.getElementById("amount").value = "50";</script>
+
+
+<h1>PayUMoney Payment Request Form </h1>
+<form action="https://test.payu.in/_payment"  name="payuform" method=POST >
+<input type="hidden" name="key"value="udSc4tKs" />
+<input type="hidden" name="hash_string" value="FB5C3AE60DB8857BDF76FF9276B5F61C24BEE926BB798B7AD899AD886091340D8707C3084E13E61998B5A0D2171C1B34172BE2DE63841EF3AFDBF11762020E1C" />
+<input type="hidden" name="hash" value="FB5C3AE60DB8857BDF76FF9276B5F61C24BEE926BB798B7AD899AD886091340D8707C3084E13E61998B5A0D2171C1B34172BE2DE63841EF3AFDBF11762020E1C" />
+<input type="hidden" name="txnid"value="54646251215"/>
+<table>
+<tr>
+<td><b>Mandatory Parameters</b></td>
+</tr>
+<tr>
+<td>Amount: </td>
+<td>
+<input name="amount" id="amount"  />
+
+<script>document.getElementById("amount").value = "50";</script>
+
+</td>
+
+<td>First Name: </td>
+<td><input name="firstname" id="firstname"  /></td>
+</tr>
+<tr>
+<td>Email: </td>
+<td><input name="email" id="email"   /></td>
+<td>Phone: </td>
+<td><input name="phone"  /></td>
+</tr>
+<tr>
+<td>Product Info: </td>
+<td colspan="3"><textarea name="productinfo" >  </textarea></td>
+</tr>
+
+<td colspan="4"><input type="submit" value="Submit"  /></td>
+</tr>
+</table>
+</form>
+</body>
+</html>

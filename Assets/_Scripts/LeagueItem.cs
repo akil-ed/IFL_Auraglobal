@@ -14,6 +14,7 @@ public class LeagueItem : MonoBehaviour {
 	public int LeagueNo;
 	public string LeagueType="FreeLeagues";
 	public GameObject TeamGrid,TeamNamePrefab;
+	public GameObject ConfirmationWindow;
 	// Use this for initialization
 	void Start () {
 		
@@ -44,7 +45,34 @@ public class LeagueItem : MonoBehaviour {
 		AppUIManager.instance.ShowSelectedLeague ();
 	}
 
+	bool isConfirmed;
 	public void JoinLeague(){
+		if (DataBaseManager.instance.Udata.Balance < _LeagueData.EntryFee) {
+		//	AppUIManager.instance.DebugLog ("Please Add more funds");
+			AppUIManager.instance.InsufficientBalance ();
+			StartCoroutine (AddFunds ());
+			return;
+		}
+
+		AppUIManager.instance.OpenConfirmation (_LeagueData.EntryFee);
+		StartCoroutine (GetConfirmation ());
+		//TeamManager.instance.CreateLeagueListing ();
+	}
+
+	IEnumerator AddFunds(){
+		while(!AppUIManager.isConfirmed)
+			yield return null;
+
+		//AppUIManager.instance.OpenWallet ();
+	}
+
+
+
+	IEnumerator GetConfirmation(){
+
+		while(!AppUIManager.isConfirmed)
+			yield return null;
+
 		int index = DataBaseManager.instance.TournamentList [0].Tournaments.IndexOf (TeamManager.instance.SelectedMatch);
 		TeamData TD = new TeamData ();
 		TD.TeamName = AuthenticationManager.TeamName;
@@ -79,7 +107,9 @@ public class LeagueItem : MonoBehaviour {
 		AppUIManager.instance.ContestJoinedTxt.text = "Contests Joined (" + TeamManager.instance.SelectedMatch.MyLeagues.Count + ")";
 		DataBaseManager.instance.TournamentList [TeamManager.instance.SelectedTournamentIndex].Tournaments [TeamManager.instance.SelectedMatchIndex] = TeamManager.instance.SelectedMatch;
 
-		//TeamManager.instance.CreateLeagueListing ();
+		DataBaseManager.instance.Udata.Balance -= _LeagueData.EntryFee;
+		DataBaseManager.instance.UpdateBalance ();
+		AppUIManager.instance.DebugLog ("League joined. Balance: "+DataBaseManager.instance.Udata.Balance.ToString ());
 	}
 
 	public void ShowTeams(){

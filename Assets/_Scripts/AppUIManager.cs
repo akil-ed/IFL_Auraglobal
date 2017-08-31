@@ -6,21 +6,25 @@ using DoozyUI;
 
 public class AppUIManager : MonoBehaviour {
 	public Sprite MainPageHighLightActive,MainPageHighLightInactive;
-	public GameObject Cam3D;
-	public Text Name,TeamName,Wallet;
+	public GameObject Cam3D,UIBG;
+	public Text Name,TeamName,Wallet,ConfirmationText;
 	public static int MainPageState,RoleState,LeaguePageState;
 	public Image[] MainPageButtons,LeaguePageButtons;
-	public GameObject[] MainPageItems,LeaguePageItems;
+	public GameObject[] MainPageItems, FootBallPageItems, KabaddiPageItems, LeaguePageItems;
 
 	public Image[] RoleButtons;
 	public GameObject[] RoleViews;
 
-	public UIElement HomePage,PlayerSelection, PlayerReview,LeaguesPage;
+	public UIElement HomePage,PlayerSelection, PlayerPreview, PlayerReview,LeaguesPage,ConfirmationWindow,WalletWindow;
+	public static bool isConfirmed;
 	public Text PlayerCount, CreditsRemaining, ContestJoinedTxt;
 	public Text[] PlayerPositionTxt;
 	public UIElement LoadingPage;
 
 	public LeagueItem SelectedLeague;
+
+	public Dropdown GameType;
+	public Text teamSelection_TeamName,myProfile_Name, verify_Email, myAccount_Bal, personalDetails_Name, personalDetails_Email,personalDetails_TeamName;
 
 	// Use this for initialization
 	public static AppUIManager instance = null;
@@ -64,10 +68,25 @@ public class AppUIManager : MonoBehaviour {
 	}
 
 	public void UpdateUserData(){
-		Name.text = DataBaseManager.instance.Udata.DisplayName;
-		TeamName.text = DataBaseManager.instance.Udata.TeamName;
-		Wallet.text = "Balance: Rs"+DataBaseManager.instance.Udata.Balance;
+		Name.text = myProfile_Name.text = personalDetails_Name.text = DataBaseManager.instance.Udata.DisplayName;
+		TeamName.text = teamSelection_TeamName.text = personalDetails_TeamName.text = DataBaseManager.instance.Udata.TeamName;
+		Wallet.text = myAccount_Bal.text = "Rs "+DataBaseManager.instance.Udata.Balance;
+		personalDetails_Email.text = DataBaseManager.instance.Udata.Email;
 	}
+	public GameObject[] Games;
+	public void ShowGame(){
+
+		HideGames ();
+		Games[GameType.value].SetActive (true);
+
+
+	}
+
+	public void HideGames(){
+		foreach (GameObject game in Games)
+			game.SetActive (false);
+	}
+
 
 	public void CheckMainPageState(){
 		switch (MainPageState) {
@@ -200,7 +219,7 @@ public class AppUIManager : MonoBehaviour {
 		PlayerPositionTxt [2].text = "(" + AR + ")";
 		PlayerPositionTxt [3].text = "(" + WK + ")";
 
-		if(Total==11){
+		if(Total==11&&WK>0){
 			PlayerPositionTxt [0].color = Color.green;
 			PlayerPositionTxt [1].color = Color.green;
 			PlayerPositionTxt [2].color = Color.green;
@@ -241,6 +260,7 @@ public class AppUIManager : MonoBehaviour {
 
 	public void OpenReview(){
 	//	Cam3D.SetActive (false);
+		HidePreview();
 		PlayerSelection.Hide (false);
 		PlayerReview.Show (false);
 	}
@@ -249,5 +269,60 @@ public class AppUIManager : MonoBehaviour {
 		SelectedLeague.AssignValues ();
 		SelectedLeague.ShowTeams ();
 	}
+
+	public void ShowPreview(){
+		UIBG.SetActive (false);
+		Cam3D.SetActive (true);
+		PlayerPreview.Show (false);
+		PlayerSelection.Hide (false);
+
+		PreviewManager.instance._TeamData.PlayerList.Clear ();
+		foreach (PlayerData PD in TeamManager.instance.MyList) {
+			PreviewManager.instance._TeamData.PlayerList.Add (PD);
+		}
+		PreviewManager.instance.AssignPlayers ();
+	}
+
+	public void HidePreview(){
+		UIBG.SetActive (true);
+		Cam3D.SetActive (false);
+		PlayerPreview.Hide (false);
+		PlayerSelection.Show (false);
+	}
+
+
+	public void CheckWallet(){
+		Application.OpenURL ("https://test.payu.in/_payment?key=udSc4tKs&txnid=001&amount=100&productinfo=testpurchase&firstname=akil&email=akil@test.com&phone=9789344663&surl=https://incrediblefl-affdd.firebaseapp.com/SuccessURL.html&furl=https://incrediblefl-affdd.firebaseapp.com/SuccessURL.html&hash=b31a0a26035431d447c1b7f1ed15f32d3534615eb83cbcc05a3ee04a04ec791a");
+	}
+
+
+	public void OpenConfirmation(int cost){
+		isConfirmed = false;
+		ConfirmationText.text = "You will be charged Rs " + cost + ". Do you want to proceed ?";
+		ConfirmationWindow.Show (true);
+
+	}
+
+	public void ConfirmPayment(){
+		isConfirmed = true;
+	}
+
+	public void DeclinePayment(){
+
+	}
+
+	public void InsufficientBalance(){
+		isConfirmed = false;
+		ConfirmationText.text = "Insufficient Balance. Do you want to proceed ?";
+		ConfirmationWindow.Show (true);
+
+	}
+
+	public void OpenWallet(){
+		WalletWindow.Show (false);
+
+	}
+
+
 
 }

@@ -14,10 +14,10 @@ using UnityEngine.UI;
 public class DataBaseManager : MonoBehaviour {
 	public GameObject MatchPrefab,TeamNameWindow;
 	public DateTime testtime;
-	public List<TournamentData> TournamentList;
+	public List<TournamentData> TournamentList,Football_List,Kabaddi_List;
 
 	public UserData Udata = new UserData();
-	public GameObject MatchContent;
+	public GameObject CricketContent,FootBallContent,KabaddiContent;
 	public InputField TeamNameTxt;
 
 	public static DataBaseManager instance = null;
@@ -50,14 +50,7 @@ public class DataBaseManager : MonoBehaviour {
 	}
 
 	public void ReadUserData(){
-	/*	if (Application.isEditor) {
-			Udata.DisplayName = "Editor";
-			Udata.DisplayName = "Editor";
-			Udata.Email = "EditorMail";
-			Udata.Balance = 10000;
-			return;
-		}
-*/
+
 		FirebaseDatabase.DefaultInstance
 			.GetReference("Users/"+AuthenticationManager.UserEmail)
 			.GetValueAsync().ContinueWith(task => {
@@ -89,6 +82,8 @@ public class DataBaseManager : MonoBehaviour {
 		AuthenticationManager.TeamName = Udata.TeamName;
 		AppUIManager.instance.UpdateUserData ();
 		ReadTournamentData ();
+		ReadFootBallData ();
+		ReadKabaddiData ();
 	}
 
 	public void SaveTeamName(){
@@ -101,10 +96,22 @@ public class DataBaseManager : MonoBehaviour {
 		AuthenticationManager.TeamName = Udata.TeamName;
 		TeamNameWindow.SetActive (false);
 		AppUIManager.instance.UpdateUserData ();
+		ReadTournamentData ();
+		ReadFootBallData ();
+		ReadKabaddiData ();
+	}
+
+	public void UpdateBalance(){
+		FirebaseDatabase.DefaultInstance
+			.GetReference ("Users/"+AuthenticationManager.UserEmail)
+			.Child ("Balance")
+			.SetValueAsync (Udata.Balance);
+
+		AppUIManager.instance.Wallet.text = "Rs " + Udata.Balance;
 	}
 
 	public void ReadTournamentData(){
-		UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, "Loading Server Data", test);
+		//UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, "Loading Server Data", test);
 		AppUIManager.instance.Loading (true);
 		DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 		FirebaseDatabase.DefaultInstance
@@ -116,14 +123,53 @@ public class DataBaseManager : MonoBehaviour {
 				else if (task.IsCompleted) {
 					DataSnapshot snapshot = task.Result;
 					string JsonValue = snapshot.GetRawJsonValue ();
-					//print(JsonValue);
-					SaveTournamentData(JsonValue);
+					SaveTournamentData(JsonValue,TournamentList,CricketContent);
 				}
 			});
 
 	}
 
-	public void SaveTournamentData(string JsonValue){
+	public void ReadFootBallData(){
+		//UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, "Loading Server Data", test);
+		AppUIManager.instance.Loading (true);
+		DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+		FirebaseDatabase.DefaultInstance
+			.GetReference("Football/Tournament")
+			.GetValueAsync().ContinueWith(task => {
+				if (task.IsFaulted) {
+					DebugLog(task.Exception.ToString ());
+				}
+				else if (task.IsCompleted) {
+					DataSnapshot snapshot = task.Result;
+					string JsonValue = snapshot.GetRawJsonValue ();
+					SaveTournamentData(JsonValue,Football_List,FootBallContent);
+				}
+			});
+
+	}
+
+	public void ReadKabaddiData(){
+		//UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, "Loading Server Data", test);
+		AppUIManager.instance.Loading (true);
+		DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
+		FirebaseDatabase.DefaultInstance
+			.GetReference("Kabaddi/Tournament")
+			.GetValueAsync().ContinueWith(task => {
+				if (task.IsFaulted) {
+					DebugLog(task.Exception.ToString ());
+				}
+				else if (task.IsCompleted) {
+					DataSnapshot snapshot = task.Result;
+					string JsonValue = snapshot.GetRawJsonValue ();
+					SaveTournamentData(JsonValue,Kabaddi_List,KabaddiContent);
+				}
+			});
+
+	}
+
+
+	public void SaveTournamentData(string JsonValue,List<TournamentData> TournamentList,GameObject MatchContent){
+		TournamentList.Clear ();
 		print (JsonValue);
 		var Tournaments = JsonConvert.DeserializeObject<Dictionary<string, object>> (JsonValue);
 		for (int i = 0; i < Tournaments.Count; i++) { // Tournament Loop
@@ -265,13 +311,13 @@ public class DataBaseManager : MonoBehaviour {
 			_TournamentData.Tournaments.Sort((x, y) => x.Date.CompareTo(y.Date));
 			TournamentList.Add (_TournamentData);
 		}
-		CreateObjects();
+		CreateObjects(MatchContent);
 		AppUIManager.instance.Loading (false);
-		UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, "Data retrieved", test);
+	//	UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, "Data retrieved", test);
 	}
 
 
-	public void CreateObjects(){
+	public void CreateObjects(GameObject MatchContent){
 		ClearListing (MatchContent.transform);
 
 		foreach (TournamentData TD in TournamentList) {

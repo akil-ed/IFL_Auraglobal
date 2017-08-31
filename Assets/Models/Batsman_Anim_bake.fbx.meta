@@ -1,0 +1,172 @@
+fileFormatVersion: 2
+guid: 5d1687f9450aa684e8a146c9c5a0276c
+timeCreated: 1502523442
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: batsman:BATSMANMESH
+    100002: batsman:char1piece1:Object003
+    100004: batsman:char1piece2:ZBrush_defualt_group
+    100006: batsman:joint1
+    100008: batsman:joint10
+    100010: batsman:joint11
+    100012: batsman:joint12
+    100014: batsman:joint13
+    100016: batsman:joint14
+    100018: batsman:joint15
+    100020: batsman:joint16
+    100022: batsman:joint17
+    100024: batsman:joint18
+    100026: batsman:joint19
+    100028: batsman:joint2
+    100030: batsman:joint20
+    100032: batsman:joint21
+    100034: batsman:joint22
+    100036: batsman:joint23
+    100038: batsman:joint3
+    100040: batsman:joint4
+    100042: batsman:joint5
+    100044: batsman:joint6
+    100046: batsman:joint7
+    100048: batsman:joint8
+    100050: batsman:joint9
+    100052: batsman:polySurface1
+    100054: batsman:polySurface14
+    100056: batsman:polySurface2
+    100058: batsman:polySurface3
+    100060: batsman:polySurface4
+    100062: batsman:polySurface5
+    100064: batsman:polySurface6
+    100066: batsman:transform1
+    100068: batsman:transform2
+    100070: batsman:transform3
+    100072: batsman:transform4
+    100074: //RootNode
+    400000: batsman:BATSMANMESH
+    400002: batsman:char1piece1:Object003
+    400004: batsman:char1piece2:ZBrush_defualt_group
+    400006: batsman:joint1
+    400008: batsman:joint10
+    400010: batsman:joint11
+    400012: batsman:joint12
+    400014: batsman:joint13
+    400016: batsman:joint14
+    400018: batsman:joint15
+    400020: batsman:joint16
+    400022: batsman:joint17
+    400024: batsman:joint18
+    400026: batsman:joint19
+    400028: batsman:joint2
+    400030: batsman:joint20
+    400032: batsman:joint21
+    400034: batsman:joint22
+    400036: batsman:joint23
+    400038: batsman:joint3
+    400040: batsman:joint4
+    400042: batsman:joint5
+    400044: batsman:joint6
+    400046: batsman:joint7
+    400048: batsman:joint8
+    400050: batsman:joint9
+    400052: batsman:polySurface1
+    400054: batsman:polySurface14
+    400056: batsman:polySurface2
+    400058: batsman:polySurface3
+    400060: batsman:polySurface4
+    400062: batsman:polySurface5
+    400064: batsman:polySurface6
+    400066: batsman:transform1
+    400068: batsman:transform2
+    400070: batsman:transform3
+    400072: batsman:transform4
+    400074: //RootNode
+    2300000: batsman:polySurface14
+    2300002: batsman:polySurface2
+    2300004: batsman:polySurface3
+    2300006: batsman:polySurface4
+    2300008: batsman:polySurface6
+    3300000: batsman:polySurface14
+    3300002: batsman:polySurface2
+    3300004: batsman:polySurface3
+    3300006: batsman:polySurface4
+    3300008: batsman:polySurface6
+    4300000: batsman:char1piece2:ZBrush_defualt_group
+    4300002: batsman:polySurface2
+    4300004: batsman:polySurface3
+    4300006: batsman:polySurface4
+    4300008: batsman:polySurface14
+    4300010: batsman:polySurface6
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: batsman:char1piece2:ZBrush_defualt_group
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

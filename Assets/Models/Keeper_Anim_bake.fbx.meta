@@ -1,0 +1,167 @@
+fileFormatVersion: 2
+guid: fbc70027a4be8994cb69cb4adeab7ea5
+timeCreated: 1502523370
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: keeper:BATSMANMESH
+    100002: keeper:char1piece1:Object003
+    100004: keeper:char1piece2:ZBrush_defualt_group
+    100006: keeper:joint1
+    100008: keeper:joint10
+    100010: keeper:joint11
+    100012: keeper:joint12
+    100014: keeper:joint13
+    100016: keeper:joint14
+    100018: keeper:joint15
+    100020: keeper:joint16
+    100022: keeper:joint17
+    100024: keeper:joint18
+    100026: keeper:joint19
+    100028: keeper:joint2
+    100030: keeper:joint20
+    100032: keeper:joint21
+    100034: keeper:joint22
+    100036: keeper:joint23
+    100038: keeper:joint3
+    100040: keeper:joint4
+    100042: keeper:joint5
+    100044: keeper:joint6
+    100046: keeper:joint7
+    100048: keeper:joint8
+    100050: keeper:joint9
+    100052: keeper:polySurface1
+    100054: keeper:polySurface2
+    100056: keeper:polySurface3
+    100058: keeper:polySurface4
+    100060: keeper:polySurface5
+    100062: keeper:polySurface6
+    100064: keeper:transform1
+    100066: keeper:transform2
+    100068: keeper:transform3
+    100070: keeper:transform4
+    100072: //RootNode
+    400000: keeper:BATSMANMESH
+    400002: keeper:char1piece1:Object003
+    400004: keeper:char1piece2:ZBrush_defualt_group
+    400006: keeper:joint1
+    400008: keeper:joint10
+    400010: keeper:joint11
+    400012: keeper:joint12
+    400014: keeper:joint13
+    400016: keeper:joint14
+    400018: keeper:joint15
+    400020: keeper:joint16
+    400022: keeper:joint17
+    400024: keeper:joint18
+    400026: keeper:joint19
+    400028: keeper:joint2
+    400030: keeper:joint20
+    400032: keeper:joint21
+    400034: keeper:joint22
+    400036: keeper:joint23
+    400038: keeper:joint3
+    400040: keeper:joint4
+    400042: keeper:joint5
+    400044: keeper:joint6
+    400046: keeper:joint7
+    400048: keeper:joint8
+    400050: keeper:joint9
+    400052: keeper:polySurface1
+    400054: keeper:polySurface2
+    400056: keeper:polySurface3
+    400058: keeper:polySurface4
+    400060: keeper:polySurface5
+    400062: keeper:polySurface6
+    400064: keeper:transform1
+    400066: keeper:transform2
+    400068: keeper:transform3
+    400070: keeper:transform4
+    400072: //RootNode
+    2300000: keeper:polySurface2
+    2300002: keeper:polySurface3
+    2300004: keeper:polySurface4
+    2300006: keeper:polySurface6
+    3300000: keeper:polySurface2
+    3300002: keeper:polySurface3
+    3300004: keeper:polySurface4
+    3300006: keeper:polySurface6
+    4300000: keeper:char1piece2:ZBrush_defualt_group
+    4300002: keeper:polySurface2
+    4300004: keeper:polySurface3
+    4300006: keeper:polySurface4
+    4300008: keeper:polySurface6
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: keeper:char1piece2:ZBrush_defualt_group
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

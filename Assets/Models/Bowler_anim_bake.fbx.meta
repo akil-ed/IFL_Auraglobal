@@ -1,0 +1,155 @@
+fileFormatVersion: 2
+guid: 35205a738ce648a4daebc9dd9f5424cb
+timeCreated: 1502507406
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: model:BATSMANMESH
+    100004: model:char1piece2:ZBrush_defualt_group
+    100006: model:joint1
+    100008: model:joint10
+    100010: model:joint11
+    100012: model:joint12
+    100014: model:joint13
+    100016: model:joint14
+    100018: model:joint15
+    100020: model:joint16
+    100022: model:joint17
+    100024: model:joint18
+    100026: model:joint19
+    100028: model:joint2
+    100030: model:joint20
+    100032: model:joint21
+    100034: model:joint22
+    100036: model:joint23
+    100038: model:joint3
+    100040: model:joint4
+    100042: model:joint5
+    100044: model:joint6
+    100046: model:joint7
+    100048: model:joint8
+    100050: model:joint9
+    100052: model:polySurface14
+    100054: model:polySurface2
+    100056: model:polySurface3
+    100058: model:polySurface4
+    100060: model:transform4
+    400000: //RootNode
+    400002: model:BATSMANMESH
+    400004: model:char1piece2:ZBrush_defualt_group
+    400006: model:joint1
+    400008: model:joint10
+    400010: model:joint11
+    400012: model:joint12
+    400014: model:joint13
+    400016: model:joint14
+    400018: model:joint15
+    400020: model:joint16
+    400022: model:joint17
+    400024: model:joint18
+    400026: model:joint19
+    400028: model:joint2
+    400030: model:joint20
+    400032: model:joint21
+    400034: model:joint22
+    400036: model:joint23
+    400038: model:joint3
+    400040: model:joint4
+    400042: model:joint5
+    400044: model:joint6
+    400046: model:joint7
+    400048: model:joint8
+    400050: model:joint9
+    400052: model:polySurface14
+    400054: model:polySurface2
+    400056: model:polySurface3
+    400058: model:polySurface4
+    400060: model:transform4
+    2300000: model:polySurface14
+    2300002: model:polySurface2
+    2300004: model:polySurface3
+    2300006: model:polySurface4
+    3300000: model:polySurface14
+    3300002: model:polySurface2
+    3300004: model:polySurface3
+    3300006: model:polySurface4
+    4300000: model:char1piece2:ZBrush_defualt_group
+    4300002: model:polySurface2
+    4300004: model:polySurface3
+    4300006: model:polySurface4
+    4300008: model:polySurface14
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: model:char1piece2:ZBrush_defualt_group
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
