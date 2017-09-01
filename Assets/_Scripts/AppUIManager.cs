@@ -12,19 +12,19 @@ public class AppUIManager : MonoBehaviour {
 	public Image[] MainPageButtons,LeaguePageButtons;
 	public GameObject[] MainPageItems, FootBallPageItems, KabaddiPageItems, LeaguePageItems;
 
-	public Image[] RoleButtons;
-	public GameObject[] RoleViews;
+	public Image[] RoleButtons,FootBallButtons,KabaddiButtons;
+	public GameObject[] RoleViews,FootBallViews,KabaddiViews;
 
 	public UIElement HomePage,PlayerSelection, PlayerPreview, PlayerReview,LeaguesPage,ConfirmationWindow,WalletWindow;
 	public static bool isConfirmed;
 	public Text PlayerCount, CreditsRemaining, ContestJoinedTxt;
-	public Text[] PlayerPositionTxt;
+	public Text[] PlayerPositionTxt,FootballPositionTxt,KabaddiPositionTxt;
 	public UIElement LoadingPage;
 
 	public LeagueItem SelectedLeague;
 
 	public Dropdown GameType;
-	public Text teamSelection_TeamName,myProfile_Name, verify_Email, myAccount_Bal, personalDetails_Name, personalDetails_Email,personalDetails_TeamName;
+	public Text teamSelection_TeamName,myProfile_Name, verify_Email, myAccount_Bal, personalDetails_Name, personalDetails_Email,personalDetails_TeamName,review_TeamName;
 
 	// Use this for initialization
 	public static AppUIManager instance = null;
@@ -69,21 +69,26 @@ public class AppUIManager : MonoBehaviour {
 
 	public void UpdateUserData(){
 		Name.text = myProfile_Name.text = personalDetails_Name.text = DataBaseManager.instance.Udata.DisplayName;
-		TeamName.text = teamSelection_TeamName.text = personalDetails_TeamName.text = DataBaseManager.instance.Udata.TeamName;
+		TeamName.text = teamSelection_TeamName.text = personalDetails_TeamName.text = review_TeamName.text = DataBaseManager.instance.Udata.TeamName;
 		Wallet.text = myAccount_Bal.text = "Rs "+DataBaseManager.instance.Udata.Balance;
 		personalDetails_Email.text = DataBaseManager.instance.Udata.Email;
 	}
 	public GameObject[] Games;
+	public static int GameID;
 	public void ShowGame(){
 
 		HideGames ();
 		Games[GameType.value].SetActive (true);
-
+		TeamManager.instance.Games[GameType.value].SetActive (true);
+		GameID = GameType.value;
 
 	}
 
 	public void HideGames(){
 		foreach (GameObject game in Games)
+			game.SetActive (false);
+
+		foreach (GameObject game in TeamManager.instance.Games)
 			game.SetActive (false);
 	}
 
@@ -94,21 +99,29 @@ public class AppUIManager : MonoBehaviour {
 			MainPageInactive ();
 			MainPageButtons [0].sprite = MainPageHighLightActive;
 			MainPageItems [0].SetActive (true);
+			FootBallPageItems [0].SetActive (true);
+			KabaddiPageItems [0].SetActive (true);
 			break;
 		case 2:
 			MainPageInactive ();
 			MainPageButtons [1].sprite = MainPageHighLightActive;
 			MainPageItems [1].SetActive (true);
+			FootBallPageItems [1].SetActive (true);
+			KabaddiPageItems [1].SetActive (true);
 			break;
 		case 3:
 			MainPageInactive ();
 			MainPageButtons [2].sprite = MainPageHighLightActive;
 			MainPageItems [2].SetActive (true);
+			FootBallPageItems [2].SetActive (true);
+			KabaddiPageItems [2].SetActive (true);
 			break;
 		case 4:
 			MainPageInactive ();
 			MainPageButtons [3].sprite = MainPageHighLightActive;
 			MainPageItems [3].SetActive (true);
+			FootBallPageItems [3].SetActive (true);
+			KabaddiPageItems [3].SetActive (true);
 			break;
 		}
 	}
@@ -125,6 +138,16 @@ public class AppUIManager : MonoBehaviour {
 		MainPageItems [2].SetActive (false);
 		MainPageItems [3].SetActive (false);
 
+		FootBallPageItems [0].SetActive (false);
+		FootBallPageItems [1].SetActive (false);
+		FootBallPageItems [2].SetActive (false);
+		FootBallPageItems [3].SetActive (false);
+
+		KabaddiPageItems [0].SetActive (false);
+		KabaddiPageItems [1].SetActive (false);
+		KabaddiPageItems [2].SetActive (false);
+		KabaddiPageItems [3].SetActive (false);
+
 	}
 
 
@@ -140,25 +163,64 @@ public class AppUIManager : MonoBehaviour {
 			RoleInactive ();
 			RoleButtons [0].sprite = MainPageHighLightActive;
 			RoleButtons [0].color = new Color (1,1,1,1);
+
+			FootBallButtons [0].sprite = MainPageHighLightActive;
+			FootBallButtons [0].color = new Color (1,1,1,1);
+
+			KabaddiButtons [0].sprite = MainPageHighLightActive;
+			KabaddiButtons [0].color = new Color (1,1,1,1);
+
 			RoleViews [0].SetActive (true);
+			FootBallViews [0].SetActive (true);
+			KabaddiViews [0].SetActive (true);
+
 			break;
 		case 2:
 			RoleInactive ();
 			RoleButtons [1].sprite = MainPageHighLightActive;
 			RoleButtons [1].color = new Color (1,1,1,1);
+
+			FootBallButtons [1].sprite = MainPageHighLightActive;
+			FootBallButtons [1].color = new Color (1,1,1,1);
+
+			KabaddiButtons [1].sprite = MainPageHighLightActive;
+			KabaddiButtons [1].color = new Color (1,1,1,1);
+
 			RoleViews [1].SetActive (true);
+			FootBallViews [1].SetActive (true);
+			KabaddiViews [1].SetActive (true);
 			break;
 		case 3:
 			RoleInactive ();
 			RoleButtons [2].sprite = MainPageHighLightActive;
 			RoleButtons [2].color = new Color (1,1,1,1);
+
+			FootBallButtons [2].sprite = MainPageHighLightActive;
+			FootBallButtons [2].color = new Color (1,1,1,1);
+
+			KabaddiButtons [2].sprite = MainPageHighLightActive;
+			KabaddiButtons [2].color = new Color (1,1,1,1);
+
+
 			RoleViews [2].SetActive (true);
+			FootBallViews [2].SetActive (true);
+			KabaddiViews [2].SetActive (true);
 			break;
 		case 4:
 			RoleInactive ();
 			RoleButtons [3].sprite = MainPageHighLightActive;
 			RoleButtons [3].color = new Color (1,1,1,1);
+
+			FootBallButtons [3].sprite = MainPageHighLightActive;
+			FootBallButtons [3].color = new Color (1,1,1,1);
+
+			//KabaddiButtons [3].sprite = MainPageHighLightActive;
+			//KabaddiButtons [3].color = new Color (1,1,1,1);
+
+
 			RoleViews [3].SetActive (true);
+			FootBallViews [3].SetActive (true);
+			//KabaddiViews [3].SetActive (true);
 			break;
 		}
 	}
@@ -169,8 +231,20 @@ public class AppUIManager : MonoBehaviour {
 			img.sprite = MainPageHighLightInactive;
 			img.color = new Color (0, 0, 0, 0);
 		}
+		foreach (Image img in FootBallButtons) {
+			img.sprite = MainPageHighLightInactive;
+			img.color = new Color (0, 0, 0, 0);
+		}
+		foreach (Image img in KabaddiButtons) {
+			img.sprite = MainPageHighLightInactive;
+			img.color = new Color (0, 0, 0, 0);
+		}
 
 		foreach (GameObject go in RoleViews)
+			go.SetActive (false);
+		foreach (GameObject go in FootBallViews)
+			go.SetActive (false);
+		foreach (GameObject go in KabaddiViews)
 			go.SetActive (false);
 
 	}
@@ -245,6 +319,67 @@ public class AppUIManager : MonoBehaviour {
 			PlayerPositionTxt [3].color = Color.yellow;
 				
 	}
+	public void UpdateFootBallCounts(int F,int M, int D,int GK,int Total){
+		FootballPositionTxt [0].text = "(" + F + ")";
+		FootballPositionTxt [1].text = "(" + M + ")";
+		FootballPositionTxt [2].text = "(" + D + ")";
+		FootballPositionTxt [3].text = "(" + GK + ")";
+
+		if(Total==11&&GK>0){
+			FootballPositionTxt [0].color = Color.green;
+			FootballPositionTxt [1].color = Color.green;
+			FootballPositionTxt [2].color = Color.green;
+			FootballPositionTxt [3].color = Color.green;
+			return;
+		}
+
+		if (F == 0)
+			FootballPositionTxt [0].color = Color.red;
+		else
+			FootballPositionTxt [0].color = Color.yellow;
+		if (M == 0)
+			FootballPositionTxt [1].color = Color.red;
+		else
+			FootballPositionTxt [1].color = Color.yellow;
+		if (D == 0)
+			FootballPositionTxt [2].color = Color.red;
+		else
+			FootballPositionTxt [2].color = Color.yellow;
+		if (GK == 0)
+			FootballPositionTxt [3].color = Color.red;
+		else
+			FootballPositionTxt [3].color = Color.yellow;
+
+	}
+	public void UpdateKabaddiCounts(int R,int A, int D,int Total){
+		KabaddiPositionTxt [0].text = "(" + R + ")";
+		KabaddiPositionTxt [1].text = "(" + A + ")";
+		KabaddiPositionTxt [2].text = "(" + D + ")";
+
+
+		if(Total==7&&R>0&&A>0&&D>0){
+			KabaddiPositionTxt [0].color = Color.green;
+			KabaddiPositionTxt [1].color = Color.green;
+			KabaddiPositionTxt [2].color = Color.green;
+			return;
+		}
+
+		if (R == 0)
+			KabaddiPositionTxt [0].color = Color.red;
+		else
+			KabaddiPositionTxt [0].color = Color.yellow;
+		if (A == 0)
+			KabaddiPositionTxt [1].color = Color.red;
+		else
+			KabaddiPositionTxt [1].color = Color.yellow;
+		if (D == 0)
+			KabaddiPositionTxt [2].color = Color.red;
+		else
+			KabaddiPositionTxt [2].color = Color.yellow;
+		
+
+	}
+
 	public void UpdateCredits(string s){
 		CreditsRemaining.text = "Credits remaining : "+s;
 	}

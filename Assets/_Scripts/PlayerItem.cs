@@ -51,9 +51,48 @@ public class PlayerItem : MonoBehaviour {
 				AppUIManager.instance.DebugLog ("Only 1 WicketKeeper allowed");
 				return;
 			}
-			if (TeamManager.instance.TeamCount == 11){
-				AppUIManager.instance.DebugLog ("Only 11 Players allowed");
+
+			if (_PlayerData.Position == "Forward" && TeamManager.instance.Fwd_Count > 2) {
+				AppUIManager.instance.DebugLog ("Only 3 Forward players allowed");
 				return;
+			}
+			if (_PlayerData.Position == "Midfielder" && TeamManager.instance.Mid_Count > 4) {
+				AppUIManager.instance.DebugLog ("Only 3-5 Midfielders allowed");
+				return;
+			}
+			if (_PlayerData.Position == "Defender" && TeamManager.instance.Def_Count > 4) {
+				AppUIManager.instance.DebugLog ("Only 3-5 All-Rounders allowed");
+				return;
+			}
+			if (_PlayerData.Position == "GoalKeeper" && TeamManager.instance.GK_Count > 0) {
+				AppUIManager.instance.DebugLog ("Only 1 Goal Keeper allowed");
+				return;
+			}
+
+			if (_PlayerData.Position == "Raider" && TeamManager.instance.R_Count > 2) {
+				AppUIManager.instance.DebugLog ("Only 1-3 Raiders allowed");
+				return;
+			}
+			if (_PlayerData.Position == "Allrounder" && TeamManager.instance.A_Count > 1) {
+				AppUIManager.instance.DebugLog ("Only 1-2 All-Rounders allowed");
+				return;
+			}
+			if (_PlayerData.Position == "Def" && TeamManager.instance.D_Count > 3) {
+				AppUIManager.instance.DebugLog ("Only 2-4 Defenders allowed");
+				return;
+			}
+
+			if (AppUIManager.GameID < 2) {
+				if (TeamManager.instance.TeamCount == 11) {
+					AppUIManager.instance.DebugLog ("Only 11 Players allowed");
+					return;
+				}
+			} 
+			else {
+				if (TeamManager.instance.TeamCount == 7) {
+					AppUIManager.instance.DebugLog ("Only 7 Players allowed");
+					return;
+				}
 			}
 			if (TeamManager.instance.CreditsRemaining < _PlayerData.Credit){
 				AppUIManager.instance.DebugLog ("Not enough credits remaining");

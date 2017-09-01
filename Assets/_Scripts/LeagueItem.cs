@@ -77,11 +77,21 @@ public class LeagueItem : MonoBehaviour {
 		TeamData TD = new TeamData ();
 		TD.TeamName = AuthenticationManager.TeamName;
 
+		string gameType;
+		if (AppUIManager.GameID == 0) {
+			gameType = "Cricket";
+		} else if (AppUIManager.GameID == 1) {
+			gameType = "Football";
+		} else {
+			gameType = "Kabaddi";
+		}
+
+
 		foreach(PlayerData PD in TeamManager.instance.MyList){
 			TD.PlayerList.Add (PD);
 
 			DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
-			reference.Child ("Cricket").Child ("Tournament")
+			reference.Child (gameType).Child ("Tournament")
 				.Child (TeamManager.instance.SelectedMatch.TournamentName)
 				.Child (TeamManager.instance.SelectedMatch.MatchName)
 				.Child (LeagueType)
@@ -105,7 +115,14 @@ public class LeagueItem : MonoBehaviour {
 
 		TeamManager.instance.SelectedMatch.MyLeagues.Add (_LeagueData);
 		AppUIManager.instance.ContestJoinedTxt.text = "Contests Joined (" + TeamManager.instance.SelectedMatch.MyLeagues.Count + ")";
-		DataBaseManager.instance.TournamentList [TeamManager.instance.SelectedTournamentIndex].Tournaments [TeamManager.instance.SelectedMatchIndex] = TeamManager.instance.SelectedMatch;
+		if (AppUIManager.GameID == 0) {
+			DataBaseManager.instance.TournamentList [TeamManager.instance.SelectedTournamentIndex].Tournaments [TeamManager.instance.SelectedMatchIndex] = TeamManager.instance.SelectedMatch;
+		} else if (AppUIManager.GameID == 1) {
+			DataBaseManager.instance.Football_List [TeamManager.instance.SelectedTournamentIndex].Tournaments [TeamManager.instance.SelectedMatchIndex] = TeamManager.instance.SelectedMatch;
+		} else {
+			DataBaseManager.instance.Kabaddi_List [TeamManager.instance.SelectedTournamentIndex].Tournaments [TeamManager.instance.SelectedMatchIndex] = TeamManager.instance.SelectedMatch;
+		}
+
 
 		DataBaseManager.instance.Udata.Balance -= _LeagueData.EntryFee;
 		DataBaseManager.instance.UpdateBalance ();

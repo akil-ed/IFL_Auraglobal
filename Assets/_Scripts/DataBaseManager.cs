@@ -81,9 +81,11 @@ public class DataBaseManager : MonoBehaviour {
 		Udata.Balance = float.Parse (User.Where (a=>a.Key.Contains("Balance")).First().Value.ToString());
 		AuthenticationManager.TeamName = Udata.TeamName;
 		AppUIManager.instance.UpdateUserData ();
+	
 		ReadTournamentData ();
 		ReadFootBallData ();
 		ReadKabaddiData ();
+
 	}
 
 	public void SaveTeamName(){
@@ -112,6 +114,7 @@ public class DataBaseManager : MonoBehaviour {
 
 	public void ReadTournamentData(){
 		//UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, "Loading Server Data", test);
+
 		AppUIManager.instance.Loading (true);
 		DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 		FirebaseDatabase.DefaultInstance
@@ -311,13 +314,13 @@ public class DataBaseManager : MonoBehaviour {
 			_TournamentData.Tournaments.Sort((x, y) => x.Date.CompareTo(y.Date));
 			TournamentList.Add (_TournamentData);
 		}
-		CreateObjects(MatchContent);
+		CreateObjects(TournamentList,MatchContent);
 		AppUIManager.instance.Loading (false);
 	//	UIManager.ShowNotification("Example_1_Notification_4", 0.5f, true, "Data retrieved", test);
 	}
 
 
-	public void CreateObjects(GameObject MatchContent){
+	public void CreateObjects(List<TournamentData> TournamentList,GameObject MatchContent){
 		ClearListing (MatchContent.transform);
 
 		foreach (TournamentData TD in TournamentList) {

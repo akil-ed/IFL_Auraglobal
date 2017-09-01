@@ -189,6 +189,9 @@ public class AuthenticationManager : MonoBehaviour {
 	}
 
 	public void UpdateUserDb(UserData UData){
+		if (UData.UserID == "")
+			return;
+
 		DatabaseReference reference = FirebaseDatabase.DefaultInstance.RootReference;
 		reference.Child ("Users").Child (UData.UserID)
 			.SetRawJsonValueAsync (JsonConvert.SerializeObject (UData));
