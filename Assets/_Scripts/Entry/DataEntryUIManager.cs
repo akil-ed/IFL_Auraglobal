@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class DataEntryUIManager : MonoBehaviour {
 	public Image[] EntryPageButtons;
@@ -9,7 +10,7 @@ public class DataEntryUIManager : MonoBehaviour {
 	public GameObject[]  EntryPageItems;//, FootBallPageItems, KabaddiPageItems;
 	public Color Selected,Unselected;
 	public MatchData SelectedMatch;
-	public string SelectedLeague;
+	public StringObject selectedGame;
 
 	public static DataEntryUIManager instance;
 
@@ -18,7 +19,8 @@ public class DataEntryUIManager : MonoBehaviour {
 	public GameObject[] TeamContents;
 	public List<EditScoreItem> Team1Players,Team2Players;
 
-	void OnEnable(){
+	void OnEnable()
+	{
 		instance = this;
 		MainPage.SetActive (true);
 		EntryPage.SetActive (false);
@@ -26,8 +28,16 @@ public class DataEntryUIManager : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		SetEntryPageGame (1);
+		selectedGame.value = Constants.cricket;
+	}
+
+
+	public void SelectGameType(string str)
+	{
+		selectedGame.value = str;
 	}
 	
 	public void SetEntryPageGame(int page){
@@ -151,12 +161,30 @@ public class DataEntryUIManager : MonoBehaviour {
 	}
 
 
-	public void PublishChanges(){
-		foreach (EditScoreItem GO in Team1Players) {
+	public void PublishChanges()
+	{
+		SelectedMatch.isLive = true;
+		foreach (EditScoreItem GO in Team1Players) 
+		{
 			GO.UpdateScore ();
 		}
-		foreach (EditScoreItem GO in Team2Players) {
+		foreach (EditScoreItem GO in Team2Players) 
+		{
 			GO.UpdateScore ();
 		}
+		DatabaseEntry.instance.CricketList.Where(a=>a.TournamentName==SelectedMatch.TournamentName).First().Tournaments.Where(a=>a.MatchName==SelectedMatch.MatchName).First().Team1Players = Team1Players.Select(a=>a._PlayerData).ToList();
+		DatabaseEntry.instance.CricketList.Where(a=>a.TournamentName==SelectedMatch.TournamentName).First().Tournaments.Where(a=>a.MatchName==SelectedMatch.MatchName).First().Team2Players = Team2Players.Select(a=>a._PlayerData).ToList();
+		DatabaseEntry.instance.UpdateMatchDetails (SelectedMatch.TournamentName,SelectedMatch.MatchName,Team1Players.Select(a=>a._PlayerData).ToList(),Team2Players.Select(a=>a._PlayerData).ToList());
+	}
+
+	public void MakeCurrentMatchLive()
+	{
+		SelectedMatch.isLive = true;
+		Firebase.Database.FirebaseDatabase.DefaultInstance.GetReference (selectedGame.value+"/"+"Tournament"+"/"+SelectedMatch.TournamentName+"/"+SelectedMatch.MatchName+"/isLive").SetValueAsync(SelectedMatch.isLive).ContinueWith(obj=>
+			{
+				if(obj.IsCompleted)
+					print("Match updated!");
+			});
 	}
 }
+

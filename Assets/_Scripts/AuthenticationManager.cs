@@ -320,12 +320,12 @@ public class AuthenticationManager : MonoBehaviour {
 
 */
 		if (user != null) {
-			Firebase.Auth.UserProfile profile = new Firebase.Auth.UserProfile {
+			Firebase.Auth.UserProfile _profile = new Firebase.Auth.UserProfile {
 				DisplayName = user.DisplayName,
 				//	Email = user.Email,
 				PhotoUrl = new System.Uri(imageURL),
 			};
-			user.UpdateUserProfileAsync(profile).ContinueWith(task => {
+			user.UpdateUserProfileAsync(_profile).ContinueWith(task => {
 				if (task.IsCanceled) {
 					Debug.LogError("UpdateUserProfileAsync was canceled.");
 					return;

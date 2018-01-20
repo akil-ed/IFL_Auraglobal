@@ -360,6 +360,7 @@ public class TournamentData
 [System.Serializable]
 public class MatchData
 {
+	public bool isLive;
 	public string MatchName;
 	public int index;
 	public string TournamentName;
@@ -382,10 +383,10 @@ public class PlayerData
 	public string PlayerID;
 	public float Credit;
 	public string Position;
-	public bool isCaptain=false;
-	public bool isViceCaptain=false;
-	public int Score=0;
-	public float FantasyPoints=0;
+	public bool isCaptain;
+	public bool isViceCaptain;
+	public int Score;
+	public float FantasyPoints;
 }
 
 [System.Serializable]

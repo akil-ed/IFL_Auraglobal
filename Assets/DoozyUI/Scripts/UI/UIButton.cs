@@ -403,7 +403,7 @@ namespace DoozyUI
         #region Send - Game Events
         void SendGameEvents()
         {
-            StartCoroutine("SendGameEventsBetweenFrames");
+			StartCoroutine(SendGameEventsBetweenFrames());
         }
 
         IEnumerator SendGameEventsBetweenFrames()

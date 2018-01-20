@@ -47,7 +47,6 @@ public class MatchItem : MonoBehaviour {
 	public void Join(){
 		if (isDataEntry) {
 			DataEntryUIManager.instance.SelectedMatch = ItemDetails;
-			DataEntryUIManager.instance.SelectedLeague = TournamentName;
 			DataEntryUIManager.instance.CreateMatchListing ();
 			DataEntryUIManager.instance.SwapPage ();
 			return;

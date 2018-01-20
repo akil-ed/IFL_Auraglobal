@@ -13,13 +13,16 @@ using UnityEngine.UI;
 public class DatabaseEntry : MonoBehaviour {
 	public List<TournamentData> CricketList,Football_List,Kabaddi_List;
 	public GameObject MatchPrefab,CricketContent,FootBallContent,KabaddiContent;
-
+	public StringObject selectedGame;
+	public static DatabaseEntry instance;
 	Firebase.Auth.FirebaseAuth auth;
 	// Use this for initialization
-//	void Start () {
+	void Start () 
+	{
 //		auth.SignInAnonymouslyAsync().ContinueWith(HandleSigninResult);
 //		ReadTournamentData ();
-//	}
+		instance = this;
+	}
 //
 //	void HandleSigninResult(Task<Firebase.Auth.FirebaseUser> authTask) {
 //		LogTaskCompletion(authTask, "Sign-in");
@@ -134,6 +137,7 @@ public class DatabaseEntry : MonoBehaviour {
 				_MatchData.Team1 = internalData.Where (a=>a.Key.Contains("Team1")).First().Value.ToString();
 				_MatchData.Team2 = internalData.Where (a=>a.Key.Contains("Team2")).First().Value.ToString();
 				_MatchData.Date = DateTime.Parse (internalData.Where (a=>a.Key.Contains("Date")).First().Value.ToString());
+				_MatchData.isLive = bool.Parse (internalData.Where (a=>a.Key.Contains("isLive")).First().Value.ToString());
 				try{
 					var TotalUserData = JsonConvert.DeserializeObject<Dictionary<string,object>> (internalData.Where (a => a.Key.Contains ("Users")).First ().Value.ToString ());
 					var UserData = JsonConvert.DeserializeObject<Dictionary<string,object>> (TotalUserData.Where (a => a.Key.Contains (AuthenticationManager.TeamName)).First ().Value.ToString ());
@@ -143,6 +147,7 @@ public class DatabaseEntry : MonoBehaviour {
 						var internalPlayerData = JsonConvert.DeserializeObject<Dictionary<string,string>> (UserData.ElementAt(k).Value.ToString()); 
 						_PlayerData.Name = internalPlayerData.Where (a=>a.Key.Contains("Name")).First().Value.ToString();
 						_PlayerData.Credit = float.Parse (internalPlayerData.Where (a=>a.Key.Contains("Credit")).First().Value.ToString());
+//						_PlayerData.FantasyPoints = float.Parse(internalPlayerData.Where (a=>a.Key.Contains("FantasyPoints")).First().Value);
 						_PlayerData.Position = internalPlayerData.Where (a=>a.Key.Contains("Position")).First().Value.ToString();
 						if(internalPlayerData.Where (a=>a.Key.Contains("isCaptain")).First().Value.ToString()=="true")
 							_PlayerData.isCaptain=true;
@@ -161,6 +166,8 @@ public class DatabaseEntry : MonoBehaviour {
 					var internalPlayerData = JsonConvert.DeserializeObject<Dictionary<string,string>> (Team1Data.ElementAt(k).Value.ToString()); 
 					_PlayerData.Name = internalPlayerData.Where (a=>a.Key.Contains("Name")).First().Value.ToString();
 					_PlayerData.Credit = float.Parse (internalPlayerData.Where (a=>a.Key.Contains("Credit")).First().Value.ToString());
+					_PlayerData.FantasyPoints = float.Parse(internalPlayerData.Where (a=>a.Key.Contains("FantasyPoints")).First().Value);
+					_PlayerData.Score = int.Parse(internalPlayerData.Where (a=>a.Key.Contains("Score")).First().Value);
 					_PlayerData.Position = internalPlayerData.Where (a=>a.Key.Contains("Position")).First().Value.ToString();
 					_MatchData.Team1Players.Add (_PlayerData);
 				}
@@ -172,7 +179,8 @@ public class DatabaseEntry : MonoBehaviour {
 					_PlayerData.Name = internalPlayerData.Where (a=>a.Key.Contains("Name")).First().Value.ToString();
 					_PlayerData.Credit = float.Parse (internalPlayerData.Where (a=>a.Key.Contains("Credit")).First().Value.ToString());
 					_PlayerData.Position = internalPlayerData.Where (a=>a.Key.Contains("Position")).First().Value.ToString();
-
+					_PlayerData.FantasyPoints = float.Parse(internalPlayerData.Where (a=>a.Key.Contains("FantasyPoints")).First().Value);
+					_PlayerData.Score = int.Parse(internalPlayerData.Where (a=>a.Key.Contains("Score")).First().Value);
 					_MatchData.Team2Players.Add (_PlayerData);
 				}
 				var FreeLeagueData = JsonConvert.DeserializeObject<Dictionary<string,object>> (internalData.Where (a => a.Key.Contains ("FreeLeagues")).First ().Value.ToString ());
@@ -196,6 +204,7 @@ public class DatabaseEntry : MonoBehaviour {
 								var internalPlayerData = JsonConvert.DeserializeObject<Dictionary<string,string>> (TeamData.ElementAt(b).Value.ToString()); 
 								_PlayerData.Name = internalPlayerData.Where (a=>a.Key.Contains("Name")).First().Value.ToString();
 								_PlayerData.Credit = float.Parse (internalPlayerData.Where (a=>a.Key.Contains("Credit")).First().Value.ToString());
+//								_PlayerData.FantasyPoints = float.Parse(internalPlayerData.Where (a=>a.Key.Contains("FantasyPoints")).First().Value);
 								_PlayerData.Position = internalPlayerData.Where (a=>a.Key.Contains("Position")).First().Value.ToString();
 								if(internalPlayerData.Where (a=>a.Key.Contains("isCaptain")).First().Value.ToString()=="true")
 									_PlayerData.isCaptain=true;
@@ -235,6 +244,7 @@ public class DatabaseEntry : MonoBehaviour {
 								var internalPlayerData = JsonConvert.DeserializeObject<Dictionary<string,string>> (TeamData.ElementAt(b).Value.ToString()); 
 								_PlayerData.Name = internalPlayerData.Where (a=>a.Key.Contains("Name")).First().Value.ToString();
 								_PlayerData.Credit = float.Parse (internalPlayerData.Where (a=>a.Key.Contains("Credit")).First().Value.ToString());
+//								_PlayerData.FantasyPoints = float.Parse(internalPlayerData.Where (a=>a.Key.Contains	("FantasyPoints")).First().Value);
 								_PlayerData.Position = internalPlayerData.Where (a=>a.Key.Contains("Position")).First().Value.ToString();
 								if(internalPlayerData.Where (a=>a.Key.Contains("isCaptain")).First().Value.ToString()=="true")
 									_PlayerData.isCaptain=true;
@@ -268,7 +278,10 @@ public class DatabaseEntry : MonoBehaviour {
 		ClearListing (MatchContent.transform);
 
 		foreach (TournamentData TD in TournamentList) {
-			foreach (MatchData _MatchData in TD.Tournaments) {
+			foreach (MatchData _MatchData in TD.Tournaments) 
+			{
+				if (!_MatchData.isLive)
+					break;
 				GameObject GO = Instantiate (MatchPrefab);
 				GO.transform.SetParent (MatchContent.transform);
 				GO.GetComponent <MatchItem> ().ItemDetails = _MatchData;
@@ -290,5 +303,44 @@ public class DatabaseEntry : MonoBehaviour {
 		foreach (Transform Child in Content)
 			Destroy (Child.gameObject);
 		Content.GetComponent <RectTransform> ().sizeDelta =  new Vector2 (563, 0);
+	}
+
+	Dictionary<string,object> GetTeamPlayers(List<PlayerData> players)
+	{
+		Dictionary<string,object> parent = new Dictionary<string, object> ();
+
+		for (int i = 0; i < players.Count; i++) 
+		{
+			Dictionary<string,object> child = new Dictionary<string, object> ();
+			child.Add ("Credit",players[i].Credit);
+			child.Add ("FantasyPoints",players[i].FantasyPoints);
+			child.Add ("Name",players[i].Name);
+			child.Add ("PlayerID",players[i].PlayerID);
+			child.Add ("Position",players[i].Position);
+			child.Add ("Score",players[i].Score);
+			child.Add ("isCaptain",players[i].isCaptain);
+			child.Add ("isViceCaptain",players[i].isViceCaptain);
+			parent.Add (players[i].PlayerID,child);
+		}
+		return parent;
+	}
+
+	public void UpdateMatchDetails(string tournamentName,string matchName,List<PlayerData> team1Players,List<PlayerData> team2Players)
+	{		
+		FirebaseDatabase.DefaultInstance.GetReference(selectedGame.value+"/Tournament/"+tournamentName+"/"+matchName+"/Team1Players").SetValueAsync(GetTeamPlayers(team1Players))
+			.ContinueWith(result=>{
+				if(result.IsCompleted)
+				{
+					print("Team 1 data updation success");
+				}
+			});
+
+		FirebaseDatabase.DefaultInstance.GetReference("Cricket/Tournament/"+tournamentName+"/"+matchName+"/Team2Players").SetValueAsync(GetTeamPlayers(team2Players))
+			.ContinueWith(result=>{
+				if(result.IsCompleted)
+				{
+					print("Team 2 data updation success");
+				}
+			});
 	}
 }

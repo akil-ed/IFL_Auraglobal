@@ -8,6 +8,8 @@ public class EditScoreItem : MonoBehaviour {
 	public Text PlayerNameTXT, PositionTXT, FantasyPointTXT,ScoreTXT;
 	//public InputField ScoreTXT;
 	public float currentpoints;
+	public InputField scoreIF;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -24,17 +26,27 @@ public class EditScoreItem : MonoBehaviour {
 		PositionTXT.text = _PlayerData.Position;
 		FantasyPointTXT.text = _PlayerData.FantasyPoints.ToString ("0.00");
 		ScoreTXT.text = _PlayerData.Score.ToString ();
-
+		scoreIF.text = _PlayerData.Score.ToString();
 	}
 
-	public void UpdateScore(){
-		return;
-
-		float newpoints = float.Parse (ScoreTXT.text);
+	public void UpdateScore()
+	{
+		float newpoints = 0f;
+		if(!string.IsNullOrEmpty(ScoreTXT.text))
+		newpoints = float.Parse (ScoreTXT.text);
 		if (newpoints > 0) {
 			currentpoints += newpoints;
 			FantasyPointTXT.text = currentpoints.ToString ("0.00");
-			ScoreTXT.text = "0";
+			//ScoreTXT.text = "0";
 		}
+
+		if(!string.IsNullOrEmpty(ScoreTXT.text))
+		_PlayerData.Score = int.Parse(ScoreTXT.text);
+		else
+			_PlayerData.Score = 0;
+		if (!string.IsNullOrEmpty (FantasyPointTXT.text))
+			_PlayerData.FantasyPoints = float.Parse (FantasyPointTXT.text);
+		else
+			_PlayerData.FantasyPoints = 0;
 	}
 }
