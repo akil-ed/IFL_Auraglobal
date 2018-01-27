@@ -14,10 +14,13 @@ public class DataEntryUIManager : MonoBehaviour {
 
 	public static DataEntryUIManager instance;
 
-	public Text MatchNameTxt, Team1NameTxt, Team2NameTxt;
+	public Text MatchNameTxt, Team1NameTxt, Team2NameTxt,fantasyPoints,selectedPlayerName;
 	public GameObject PlayerItem;
 	public GameObject[] TeamContents;
 	public List<EditScoreItem> Team1Players,Team2Players;
+	public InputField run;
+	public bool selectedTeam1;
+	public int selectedIndex;
 
 	void OnEnable()
 	{
@@ -185,6 +188,20 @@ public class DataEntryUIManager : MonoBehaviour {
 				if(obj.IsCompleted)
 					print("Match updated!");
 			});
+	}
+
+	public void SetPlayerScoreAndFP()
+	{
+		if (selectedTeam1) 
+		{
+			Team1Players [selectedIndex].FantasyPointTXT.text = fantasyPoints.text;
+			Team1Players [selectedIndex].ScoreTXT.text = run.text;
+		}
+		else
+		{
+			Team2Players [selectedIndex].FantasyPointTXT.text = fantasyPoints.text;
+			Team2Players [selectedIndex].ScoreTXT.text = run.text;
+		}
 	}
 }
 
