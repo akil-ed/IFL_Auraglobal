@@ -194,12 +194,12 @@ public class DataEntryUIManager : MonoBehaviour {
 	{
 		if (selectedTeam1) 
 		{
-			Team1Players [selectedIndex].FantasyPointTXT.text = fantasyPoints.text;
+			Team1Players [selectedIndex].FantasyPointTXT.text = float.Parse(fantasyPoints.text).ToString("0.00");
 			Team1Players [selectedIndex].ScoreTXT.text = run.text;
 		}
 		else
 		{
-			Team2Players [selectedIndex].FantasyPointTXT.text = fantasyPoints.text;
+			Team2Players [selectedIndex].FantasyPointTXT.text = float.Parse(fantasyPoints.text).ToString("0.00");
 			Team2Players [selectedIndex].ScoreTXT.text = run.text;
 		}
 	}
