@@ -1,23 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DoozyUI;
 using UnityEngine;
-using DoozyUI;
 
-public class UIBaseClass : MonoBehaviour 
+public class UIBaseClass : MonoBehaviour
 {
-	protected void Show(UIElement element)
-	{
-		element.gameObject.SetActive (true);
-		element.Show (false);
-	}
+    protected void Show(UIElement element)
+    {
+        element.gameObject.SetActive(true);
+        element.Show(false);
+    }
 
-	protected void Hide(UIElement element)
-	{
-		element.Hide (false);
-	}
+    protected void Hide(UIElement element)
+    {
+        element.Hide(false);
+    }
 
-	protected void SetActive(GameObject obj,bool val)
-	{
-		obj.SetActive (val);
-	}
+    protected void SetActive(GameObject obj, bool val)
+    {
+        obj.SetActive(val);
+    }
+
+    protected UI CreateUIElementIntoCanvas(UI element, Transform parent, string json)
+    {
+        var instance = Instantiate(element);
+        instance.Display(json);
+        instance.transform.SetParent(parent);
+        return instance;
+    }
 }

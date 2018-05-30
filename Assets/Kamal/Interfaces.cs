@@ -1,4 +1,9 @@
 ﻿public interface IUIExecutable
 {
-	void Execute();
+    void Execute();
+}
+
+public interface IIndex
+{
+    int index { get; set; }
 }
